@@ -4,6 +4,7 @@ At match minute T the app knows: the six factors over the minutes you recorded (
 and from the API the whole match so far ([0, T)): corners, shots, blocked shots, shots on target, possession, score.
 One Poisson model for each team's corners after T (offset = minutes left), pooled over many (J, T) pairs, fitted on
 club 2015/16 and checked on the 2018-2024 tournaments against the six-only model.
+Also checks manual sync: the API numbers taken `lag` minutes before T (last time you pressed sync) instead of at T.
 
 Usage: python3 -I six_join2.py <timeline.csv> <out_json>
 """
@@ -25,7 +26,7 @@ exec(compile(src, 'six_join.py', 'exec'), g)
 matches, ends, kinds, six_feats, window, irls = g['matches'], g['ends'], g['kinds'], g['six_feats'], g['window'], g['irls']
 
 
-def rows_for(J, T):
+def rows_for(J, T, lag=0):
     out = []
     for mid, evs in matches.items():
         e = ends[mid]
@@ -39,6 +40,7 @@ def rows_for(J, T):
             continue
         p_obs = 1 if J < 45 else 2
         el = T if T <= 45 else 45 + (T - 45)   # minutes of play so far (first-half stoppage ignored)
+        snap = T - lag                          # when the API numbers were last fetched
         for side in (0, 1):
             wat = defaultdict(int); wato = defaultdict(int); api = defaultdict(int); apio = defaultdict(int)
             y = 0; gl = glo = 0
@@ -51,13 +53,14 @@ def rows_for(J, T):
                 own = s == side
                 if J <= t and (p == p_obs or J < 45 <= T):
                     (wat if own else wato)[c] += 1
-                if c in ('ck', 'xsh', 'xshb', 'xsht', 'xpa'):
+                tm = t if p == 2 or t < 45 else 45.0
+                if c in ('ck', 'xsh', 'xshb', 'xsht', 'xpa') and (lag == 0 or tm < snap):
                     (api if own else apio)[c] += 1
                 if c == 'gl':
                     if own: gl += 1
                     else: glo += 1
             pas = api['xpa'] + apio['xpa']
-            k = 45.0 / max(el, 1)
+            k = 45.0 / max(el - lag, 1)
             out.append({'kind': kinds[mid], 'y': y, 'rem': rem, 'J': J, 'T': T,
                         'six': six_feats(wat, wato, T - J),
                         'api': [api['ck'] * k, apio['ck'] * k, api['xsh'] * k, api['xshb'] * k, api['xsht'] * k, api['xpa'] / pas if pas else 0.5],
@@ -103,9 +106,18 @@ for (J, T) in PAIRS:
     report[f'J{J}_T{T}'] = {k: score(m, sub) for k, m in models.items()}
     report[f'J{J}_T{T}']['n'] = len(sub)
 overall = {k: score(m, te) for k, m in models.items()}
+# manual sync: same fitted models, API numbers from `lag` minutes ago (score and six factors are current)
+stale = {}
+for lag in (0, 5, 10, 15, 20, 30):
+    rs = []
+    for J, T in PAIRS:
+        if T - lag > max(J, 5):
+            rs += [r for r in rows_for(J, T, lag) if r['kind'] == 'intl']
+    stale[f'lag{lag}'] = {'n': len(rs), 'six_api_state': score(models['six_api_state'], rs), 'six': score(models['six'], rs)}
+    print(f"API numbers {lag:2d} min old: six+API+score corr {stale[f'lag{lag}']['six_api_state']['corr']:.3f}, six only {stale[f'lag{lag}']['six']['corr']:.3f} (n={len(rs)})")
 print('overall (tournaments, all join/now pairs):', json.dumps(overall, ensure_ascii=False))
 for k, v in report.items():
     print(k, 'n', v['n'], ' '.join(f"{m}:{v[m]['corr']:.3f}" for m in models))
-json.dump({'models': models, 'overall': overall, 'by_pair': report, 'feat_names': {
+json.dump({'models': models, 'overall': overall, 'by_pair': report, 'stale': stale, 'feat_names': {
     'six': ['到达每10分', '心态', '被挡率', '禁区内空间', '失误率', '45度占比'], 'api': ['角球/45', '对方角球/45', '射门/45', '被挡射门/45', '射正/45', '控球'],
     'st': ['领先', '落后'], 'time': ['已踢分钟/90']}}, open(OUTJ, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)

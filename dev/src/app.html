@@ -857,11 +857,12 @@ function sixFeats(m, i){
   return [(P.ar + P0.arr_rate) / (P.mins + 10) * 10, (P.f5[0] + P0.aggr * 4) / (P.f5[1] + 4), (P.f4[0] + P0.block * 4) / (P.f4[1] + 4),
     (P.f3[0] + P0.space * 4) / (P.f3[1] + 4), (P.f6[0] + P0.err * 4) / (P.f6[1] + 4), (g.e + P0.deep * 4) / (g.d + g.e + 4)];
 }
-/* 联网的数字可以用：最近 15 分钟内同步过、比赛进行中、有角球、射门和控球 */
+/* 联网的数字可以用：最近 30 分钟内同步过、比赛进行中、有角球、射门和控球。
+   手动同步也够用：用半小时前的联网数据，估计照样比只用六项准（国际大赛检验，相关系数 0.50–0.56 对 0.47–0.52） */
 function apiFeats(m, i){
   const a = m.api;
   if (!a || !a.ck || !a.sh || !a.pos || !a.el || m.st === 2) return null;
-  if (nowSec() - (a.at || 0) > 900 || LIVE_ST.indexOf(a.st) < 0) return null;
+  if (nowSec() - (a.at || 0) > 1800 || LIVE_ST.indexOf(a.st) < 0) return null;
   const k = 45 / Math.max(1, a.el + (a.ex || 0));
   return [a.ck[i] * k, a.ck[1 - i] * k, a.sh[i].t * k, a.sh[i].b * k, a.sh[i].on * k, a.pos[i] / 100];
 }
@@ -1287,7 +1288,7 @@ function renderSheet(){
         + '<div><h4>公开数据告诉我们的</h4><p>' + esc(BASE.src) + '，' + BASE.n.matches + ' 场。其他条件一样时，从最低两成到最高两成：①到达让角球多约 59%、⑤心态多约 41%、④被挡多约 16%；③禁区内空间大、45 度传中多，角球反而少一些；⑥质量的影响很小，因为“传中打在第一个人身上”既是质量差，又是最多角球的来源。</p></div>'
         + '<div><h4>角球从哪里来</h4><table class="yt"><tbody>' + orig + '</tbody></table></div>'
         + '<div><h4>每种结果变成角球的机会</h4><table class="yt"><tbody>' + [['远射被扑出', 'lp'], ['禁区射门被扑出', 'sp'], ['下底传中被挡', 'db'], ['禁区射门被挡', 'sb'], ['远射被挡', 'lb'], ['下底传中被解围', 'dc'], ['45度传中被解围', 'ec'], ['45度传中被挡', 'eb'], ['突破渗透被断', 'pl'], ['下底传中被门将处理', 'dg'], ['射门偏出', 'sx'], ['射门被没收、进球、到人', 'sh']].map(x => '<tr><td>' + x[0] + '</td><td>' + pc(Y[x[1]]) + '</td></tr>').join('') + '</tbody></table></div>'
-        + '<div><h4>中途加入、联网</h4><p>模拟在第 15–70 分钟加入、自己再看 5–15 分钟，预测之后每队还有几个角球（国际大赛检验）：只用你看的这几分钟六项，相关系数 0.15–0.28；只用联网的加入前数据 0.23–0.34；两个加起来再加比分 0.31–0.39；对照：从开球就看、只用六项 0.23–0.34。联网里有用的是射门、射正、控球和比分，加入前有几个角球本身帮助很小。</p></div>'
+        + '<div><h4>中途加入、联网</h4><p>模拟在第 15–70 分钟加入、自己再看 5–15 分钟，预测之后每队还有几个角球（国际大赛检验）：只用你看的这几分钟六项，相关系数 0.15–0.28；只用联网的加入前数据 0.23–0.34；两个加起来再加比分 0.31–0.39；对照：从开球就看、只用六项 0.23–0.34。联网里有用的是射门、射正、控球和比分，加入前有几个角球本身帮助很小。不用一直同步：半小时内按过一次“同步”，“接下来”就会用上联网的数据（用半小时前的数据，照样比只用六项准）。</p></div>'
         + '<div><h4>等级怎么定</h4><p>每一项都跟基准的五等分比：最低两成是 1、最高两成是 5。时间短、次数少的时候会往平均拉一点；次数太少就先显示“—”。点任何一格可以改成你自己的手动评级，统计时两种都会保存。</p></div>'
         + '</div>';
       break;
@@ -1423,7 +1424,7 @@ function renderSheet(){
         + '<div class="chips"><button class="chip" data-a="nauto" data-v="1" aria-pressed="' + !!NET.auto + '">开</button><button class="chip" data-a="nauto" data-v="0" aria-pressed="' + !NET.auto + '">关（只在按“查找”时找）</button></div>'
         + '<div class="lbl">记录时自动同步</div>'
         + '<div class="chips">' + [[0, '关（只在按“同步”时）'], [300, '每 5 分钟'], [180, '每 3 分钟'], [120, '每 2 分钟']].map(x => '<button class="chip" data-a="niv" data-v="' + x[0] + '" aria-pressed="' + (NET.iv === x[0]) + '">' + x[1] + '</button>').join('') + '</div>'
-        + '<p class="hint">每次同步用 1 次请求，查找一场用 1–3 次。' + (NET.quota ? 'API-Football 显示今天已用 ' + NET.quota.cur + ' / ' + NET.quota.lim + ' 次（' + esc(NET.quota.t) + ' 查询，两个 app 合计）。' : '今天这个 app 大约用了 ' + used + ' 次请求。') + '每 3 分钟自动同步的话，一场比赛约 35 次。</p>'
+        + '<p class="hint">每次同步用 1 次请求，查找一场用 1–3 次。' + (NET.quota ? 'API-Football 显示今天已用 ' + NET.quota.cur + ' / ' + NET.quota.lim + ' 次（' + esc(NET.quota.t) + ' 查询，两个 app 合计）。' : '今天这个 app 大约用了 ' + used + ' 次请求。') + (NET.iv > 0 ? '现在每 ' + Math.round(NET.iv / 60) + ' 分钟自动同步一次，一场比赛约 ' + Math.round(100 * 60 / NET.iv) + ' 次。' : '现在只在你按“同步”时才联网，最省额度。') + '</p>'
         + '<div class="lbl">画面延迟</div>'
         + '<p class="hint" style="margin-top:0">' + (dl != null && dl < 10 ? '你看的画面跟联网的实时时间差不多（相差不到 10 秒）。' : dl != null ? '你看的画面大约比实时慢 <b>' + fmtDelay(dl) + '</b>。中途加入时会自动扣掉；同步到的角球，会等画面追上之后、你还没点的才补上。' : '还没测出来。连上比赛后，在画面上看到开球时按 ▶，或中途加入时把时间对准画面，app 会自动算出你的画面比实时慢多少。') + '</p>'
         + (dl != null ? '<div class="row"><button class="pill" data-a="ndl0">重新测（换了看球的地方时）</button></div>' : '')
@@ -1728,7 +1729,8 @@ const DONE_ST = ['FT', 'AET', 'PEN', 'AWD', 'WO'];
 const ST_ZH = { TBD: '时间未定', NS: '未开赛', '1H': '上半场', HT: '中场休息', '2H': '下半场', ET: '加时', BT: '加时休息', P: '点球大战', SUSP: '暂停', INT: '中断', FT: '已完场', AET: '加时完场', PEN: '点球完场', PST: '延期', CANC: '取消', ABD: '腰斩', AWD: '判定胜负', WO: '弃权', LIVE: '进行中' };
 const dayKey = d => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
 const TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e){ return 'UTC'; } })();
-const NET = Object.assign({ key: '', auto: true, iv: 180, used: {}, delay: null, quota: null }, LS.get('corner-six-net', {}) || {});
+const NET = Object.assign({ key: '', auto: true, iv: 0, used: {}, delay: null, quota: null }, LS.get('corner-six-net', {}) || {});
+if (!NET.ivSet) NET.iv = 0;   // 默认只在按“同步”时联网（省额度）；自己在设定里选过才会自动同步
 const SBNET = LS.get('corner-sb-net', {}) || {};
 const saveNet = () => LS.set('corner-six-net', NET);
 const apiKey = () => (NET.key || '').trim() || (NET.nosb ? '' : String(SBNET.key || '').trim());
@@ -2365,7 +2367,7 @@ document.addEventListener('click', ev => {
     case 'nkey0': NET.key = ''; NET.nosb = 1; saveNet(); sheetData.msg = '已清除。'; renderSheet(); renderNet(); break;
     case 'nsb': NET.key = ''; NET.nosb = 0; saveNet(); sheetData.msg = '改用“角球数据记录”里的 key。'; renderSheet(); renderNet(); break;
     case 'nauto': NET.auto = b.dataset.v === '1'; saveNet(); renderSheet(); break;
-    case 'niv': NET.iv = +b.dataset.v; saveNet(); renderSheet(); break;
+    case 'niv': NET.iv = +b.dataset.v; NET.ivSet = 1; saveNet(); renderSheet(); break;
     case 'ndl0': NET.delay = null; NET.dl0 = 1; if (M.api){ M.api.dl = null; M.api.dlk = null; } saveNet(); saveNow(); renderSheet(); showToast('已清除画面延迟，下次开球或中途加入时重新测'); break;
     case 'nsync': closeSheet(); apiSync(true); break;
     case 'nfind': closeSheet(); M.apiNo = null; apiFind(true); break;

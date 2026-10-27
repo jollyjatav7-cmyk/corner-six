@@ -56,10 +56,12 @@ async function mock(ctx){
     return route.fulfill({ status: 200, headers, body: JSON.stringify(body) });
   });
 }
-async function page(b, w, h, mob, nowIso){
+async function page(b, w, h, mob, nowIso, sixNet){
   fresh(); calls.length = 0;
   const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 2, isMobile: mob, hasTouch: mob, serviceWorkers: 'block' });
   await mock(ctx);
+  // settings this app saved earlier on the device (e.g. by v2, whose default was auto sync every 3 minutes)
+  if (sixNet) await ctx.addInitScript(n => { if (!localStorage.getItem('corner-six-net')) localStorage.setItem('corner-six-net', JSON.stringify(n)); }, sixNet);
   await ctx.addInitScript(() => { if (!localStorage.getItem('corner-sb-net')) localStorage.setItem('corner-sb-net', JSON.stringify({ key: 'SBKEY', delay: 40, auto: true })); });
   const p = await ctx.newPage();
   p.errs = [];
@@ -81,7 +83,7 @@ async function sync(p){
   const b = await chromium.launch();
   // ---------- A. phone: join at 67' from Chinese names, sync, merge ----------
   // now = kick-off + 3600 (second half started) + 22 min -> API minute 67; your screen is 40 s behind
-  let { ctx, p } = await page(b, 390, 763, true, new Date((KO + 3600 + 22 * 60) * 1000).toISOString());
+  let { ctx, p } = await page(b, 390, 763, true, new Date((KO + 3600 + 22 * 60) * 1000).toISOString(), { key: '', auto: true, iv: 180, used: {}, delay: null, quota: null });
   check((await p.textContent('#qbSync')).indexOf('查找') >= 0, 'key reused from the corner-sb app: the sync button offers 查找');
   await p.fill('#fH', '鹿岛鹿角'); await p.fill('#fA', '横滨水手');
   await p.clock.runFor(3000);
@@ -122,7 +124,7 @@ async function sync(p){
   // auto sync every 3 minutes
   const before = calls.length;
   await p.clock.runFor(185000);
-  check(calls.length > before, 'auto sync fires on its own (' + (calls.length - before) + ' requests)');
+  check(calls.length === before, 'no automatic sync by default, even with the old every-3-minutes setting saved on the phone (' + (calls.length - before) + ' requests in 3 min)');
   await p.click('#qbSix'); await p.waitForTimeout(350);
   const six = await p.textContent('#tabSix');
   check(six.indexOf('按六项＋联网估计') >= 0, 'six table labels the estimate as six factors + API');
@@ -139,6 +141,12 @@ async function sync(p){
   await p.click('.tabs [data-tab="data"]');
   await p.screenshot({ path: `${out}/net_data.png` });
   await p.click('[data-a="midclose"]'); await p.waitForTimeout(300);
+  // with manual sync the last API numbers keep feeding the estimate for 30 minutes
+  const age = () => S(p, () => Math.round((Date.now() / 1000 - window.__six.M.api.at) / 60));
+  await p.clock.runFor(20 * 60000);
+  check(await S(p, () => window.__six.projection(window.__six.M, 0).net), 'estimate still uses the API data ' + (await age()) + ' min after the last sync');
+  await p.clock.runFor(10 * 60000);
+  check(!(await S(p, () => window.__six.projection(window.__six.M, 0).net)), 'after 30 min without a sync the estimate falls back to the six factors (' + (await age()) + ' min)');
   // full time
   FX[2001].st = 'FT'; FX[2001].el = 90;
   await sync(p);
@@ -248,6 +256,19 @@ async function sync(p){
   st = await S(p, () => ({ dl: window.__six.M.api.dl, b: window.__six.M.tm.b, r: window.__six.M.tm.r, obs: window.__six.M.obs }));
   check(!(await p.isVisible('#card [data-a="jgo"]')) && st.r === 1 && st.obs.t === 0, 'watching from kick-off: sync does not offer a join');
   check(st.dl >= 34 && st.dl <= 37, 'delay measured from your kick-off tap: ' + st.dl + ' s');
+  // nothing happens on its own while you record
+  let n0 = calls.length; await p.clock.runFor(400000);
+  check(calls.length === n0, 'manual by default: no requests during 6+ minutes of recording');
+  // auto sync can still be switched on in the settings
+  await p.click('[data-a="menu"]'); await p.click('#card [data-a="net"]');
+  check((await p.textContent('#card')).indexOf('现在只在你按“同步”时才联网') >= 0, 'settings say sync is manual');
+  await p.click('#card [data-a="niv"][data-v="180"]');
+  check((await p.textContent('#card')).indexOf('现在每 3 分钟自动同步一次') >= 0, 'settings show the chosen interval');
+  await p.click('#card [data-a="close"]');
+  n0 = calls.length; await p.clock.runFor(185000);
+  check(calls.length > n0, 'after choosing every 3 minutes, auto sync runs (' + (calls.length - n0) + ' requests)');
+  await p.reload();
+  check(await S(p, () => JSON.parse(localStorage.getItem('corner-six-net')).iv === 180), 'a chosen interval is kept after reopening');
   console.log('phone E errors:', p.errs.length ? p.errs.join('\n') : 'none'); if (p.errs.length) fails++;
   await ctx.close();
   await b.close();
