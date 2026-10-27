@@ -1,0 +1,17 @@
+{
+  "name": "角球六要素",
+  "short_name": "角球六要素",
+  "description": "按六个要素记录比赛：到达、行动选择、禁区内外空间、心态、质量，对照公开数据看角球",
+  "lang": "zh-Hans",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F1F3EF",
+  "theme_color": "#2F6C4B",
+  "icons": [
+    { "src": "./icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
