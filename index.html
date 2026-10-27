@@ -89,6 +89,18 @@ input,textarea{font:inherit;color:inherit}
 .k .l{font-size:14px;font-weight:600;line-height:1.15;text-align:center;white-space:nowrap}
 .k .c{font:600 18px/1 var(--f-num);font-variant-numeric:tabular-nums;color:var(--chalk2)}
 .k.big{min-height:64px;flex-direction:row;gap:10px}
+/* 跟平均比：均x（公开数据里同样是主队／客队的球队，在你看的同样时间里平均几次）；↑明显比平均多、↓明显比平均少 */
+.av{font:500 11px/1 var(--f-num);font-variant-numeric:tabular-nums;color:var(--chalk2);white-space:nowrap;letter-spacing:.01em}
+.av.up{color:var(--flag);font-weight:700}
+.av.dn{opacity:.6}
+.av:empty{display:none}
+.k.ckb .av,.k.ckb .av.up{color:var(--on-flag)} .k.ckb .av.up{font-weight:800}
+.k.big .av{font-size:12px}
+.rl .av{font:500 11.5px/1 var(--f-num);margin-top:3px;color:var(--chalk2)}
+.rl .av.up{font-weight:700;color:var(--flag)}
+.row5 .k{padding:6px 2px}
+.row5 .k .av{font-size:10.5px;letter-spacing:-.02em}
+@media (min-width:900px) and (max-width:1100px){.row5 .k .av{font-size:9.5px;letter-spacing:-.04em}}
 .k.big .l{font-size:17px}
 .k.big .c{font-size:26px}
 .k.ckb{background:var(--flag);color:var(--on-flag)} .k.ckb .c{color:var(--on-flag);opacity:.75}
@@ -118,6 +130,7 @@ input,textarea{font:inherit;color:inherit}
 .ov[hidden]{display:none}
 .ov-h{display:flex;align-items:center;gap:6px;padding:2px 2px 0 6px;min-height:30px}
 .ov-h b{flex:1;font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ov.fol .ov-h b{color:var(--flag)}
 .ov-h button{border:0;background:none;color:var(--chalk2);font-size:12.5px;height:30px;padding:0 6px;white-space:nowrap}
 .ov-t{height:3px;border-radius:2px;background:var(--tile2);margin:0 6px;overflow:hidden}
 .ov-t i{display:block;height:100%;background:var(--flag);width:100%;transform-origin:left center}
@@ -166,14 +179,18 @@ input,textarea{font:inherit;color:inherit}
 .ckv small{font:500 12px var(--f-ui);color:var(--muted);margin-left:4px}
 .proj{font-size:12px;color:var(--ink2);line-height:1.4}
 .proj b{font:700 15px var(--f-num);color:var(--ink)}
+.fac{display:block;margin-top:4px;font-size:11px;line-height:1.35;color:var(--muted)}
 .note{font-size:12px;line-height:1.5;color:var(--muted);margin:0}
 .dt{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
 .dt th{font-size:11.5px;font-weight:700;color:var(--muted);text-align:right;padding:2px 0 6px}
 .dt th:first-child{text-align:left;width:38%}
+.dt3 th:first-child{width:34%}
 .dt th.h{color:var(--home)} .dt th.a{color:var(--away)}
 .dt td{border-top:1px solid var(--rule);padding:6px 0;text-align:right;font:600 15px var(--f-num);font-variant-numeric:tabular-nums}
 .dt td:first-child{text-align:left;font:600 13px var(--f-ui);color:var(--ink2)}
 .dt td small{font:500 11px var(--f-ui);color:var(--muted);margin-left:2px}
+.dt .av{color:var(--muted);margin-left:4px;font-size:11.5px}
+.dt .av.up{color:var(--ink);opacity:1} .dt .av.dn{opacity:.75}
 .dt tr.sub td:first-child{font-weight:500;color:var(--muted);padding-left:12px}
 .dt tr.sub td{font-size:14px;color:var(--ink2)}
 .srcl{display:grid;gap:4px}
@@ -506,7 +523,7 @@ textarea.fi{height:140px;padding:10px 12px;font:12px/1.4 ui-monospace,Menlo,mono
 <div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button id="toastBtn" hidden>撤销</button></div>
 <input type="file" id="fileIn" class="vh" accept=".json,application/json,text/plain" tabindex="-1" aria-hidden="true">
 <script>
-var BASE = {"src":"StatsBomb Open Data 2015/16 英超、西甲、意甲、法甲","n":{"matches":1517,"halves":6068},"half":{"f1_rate":{"m":3.7119,"q":[2.6606,3.3285,3.9554,4.7647]},"f1_share":{"m":0.5,"q":[0.3714,0.4615,0.5385,0.6286]},"f2_cross":{"m":0.5512,"q":[0.3846,0.5,0.5909,0.7143]},"f2_dcross":{"m":0.3857,"q":[0.2414,0.3333,0.4167,0.5238]},"f2_ecross":{"m":0.1655,"q":[0.0714,0.129,0.1818,0.25]},"f2_deep_share":{"m":0.3002,"q":[0.1538,0.25,0.3333,0.4409]},"f2_pen":{"m":0.5661,"q":[0.4,0.5,0.6,0.7222]},"f2_lshot":{"m":0.1339,"q":[0.0556,0.1,0.1429,0.2083]},"f2_mix_cross":{"m":0.4404,"q":[0.3333,0.4115,0.4737,0.5455]},"f2_mix_pen":{"m":0.4518,"q":[0.3462,0.4182,0.48,0.5556]},"f2_mix_lshot":{"m":0.1078,"q":[0.0455,0.08,0.1176,0.1667]},"f3_space":{"m":0.5418,"q":[0.375,0.5,0.6,0.7059]},"f3_cross_ok":{"m":0.4107,"q":[0.2,0.3333,0.5,0.6]},"f4_block":{"m":0.4215,"q":[0.3182,0.3846,0.4483,0.5217]},"f4_cross_blk":{"m":0.227,"q":[0.0909,0.1667,0.25,0.3333]},"f5_aggr":{"m":0.8862,"q":[0.6667,0.8125,0.9355,1.0946]},"f6_err":{"m":0.3921,"q":[0.2632,0.3333,0.4167,0.5]},"corner_rate":{"m":0.5323,"q":[0.208,0.4146,0.6122,0.8373]},"vol":{"arr":17.671,"arrB":24.372,"arr80":22.217,"cross":9.898,"cross_blk":2.212,"cross_clr":3.2,"cross_gk":0.442,"cross_ok":2.591,"cross_bad":1.453,"pen":9.991,"pen_ok":3.693,"pen_lost":6.298,"lshot":2.316,"lshot_blk":0.708,"lshot_hold":0.326,"lshot_parry":0.198,"lshot_off":1.014,"lshot_goal":0.07,"bshot":3.539,"bshot_blk":0.757,"bshot_hold":0.355,"bshot_parry":0.518,"bshot_off":1.412,"bshot_goal":0.497,"corners":2.536,"goals":0.656,"mins":47.585},"pooled":{"f1_rate":3.7136,"f1_share":0.5,"f2_cross":0.5601,"f2_dcross":0.3925,"f2_ecross":0.1676,"f2_deep_share":0.2992,"f2_pen":0.5654,"f2_lshot":0.1311,"f2_mix_cross":0.4458,"f2_mix_pen":0.4499,"f2_mix_lshot":0.1043,"f3_space":0.5498,"f3_cross_ok":0.4158,"f4_block":0.4151,"f4_cross_blk":0.2235,"f5_aggr":0.8914,"f6_err":0.3776,"corner_rate":0.5329}},"match":{"f1_rate":{"m":3.714,"q":[2.8322,3.3924,3.9316,4.6117]},"f1_share":{"m":0.5,"q":[0.3906,0.4643,0.5357,0.6094]},"f2_cross":{"m":0.5508,"q":[0.4167,0.5111,0.5891,0.6765]},"f2_dcross":{"m":0.3851,"q":[0.28,0.3462,0.4103,0.4857]},"f2_ecross":{"m":0.1657,"q":[0.0976,0.1429,0.1818,0.2292]},"f2_deep_share":{"m":0.3009,"q":[0.2,0.2667,0.3333,0.4]},"f2_pen":{"m":0.5634,"q":[0.4375,0.5145,0.5909,0.6812]},"f2_lshot":{"m":0.1326,"q":[0.0741,0.1081,0.1429,0.1875]},"f2_mix_cross":{"m":0.4412,"q":[0.3609,0.4182,0.4654,0.5238]},"f2_mix_pen":{"m":0.4517,"q":[0.3736,0.425,0.4737,0.5323]},"f2_mix_lshot":{"m":0.1071,"q":[0.0606,0.0889,0.1143,0.1489]},"f3_space":{"m":0.5459,"q":[0.4348,0.5128,0.5833,0.6667]},"f3_cross_ok":{"m":0.4123,"q":[0.2727,0.3684,0.4444,0.5556]},"f4_block":{"m":0.4206,"q":[0.3448,0.3958,0.4412,0.5]},"f4_cross_blk":{"m":0.2266,"q":[0.1359,0.1905,0.25,0.3125]},"f5_aggr":{"m":0.8837,"q":[0.72,0.8293,0.9286,1.0385]},"f6_err":{"m":0.3877,"q":[0.2941,0.3529,0.4091,0.4706]},"corner_rate":{"m":0.5327,"q":[0.309,0.4216,0.5423,0.7476]},"vol":{"arr":35.342,"arrB":48.744,"arr80":44.434,"cross":19.795,"cross_blk":4.424,"cross_clr":6.4,"cross_gk":0.884,"cross_ok":5.183,"cross_bad":2.905,"pen":19.982,"pen_ok":7.385,"pen_lost":12.596,"lshot":4.632,"lshot_blk":1.416,"lshot_hold":0.653,"lshot_parry":0.397,"lshot_off":2.027,"lshot_goal":0.139,"bshot":7.077,"bshot_blk":1.515,"bshot_hold":0.709,"bshot_parry":1.035,"bshot_off":2.825,"bshot_goal":0.993,"corners":5.072,"goals":1.311,"mins":95.169},"pooled":{"f1_rate":3.7136,"f1_share":0.5,"f2_cross":0.5601,"f2_dcross":0.3925,"f2_ecross":0.1676,"f2_deep_share":0.2992,"f2_pen":0.5654,"f2_lshot":0.1311,"f2_mix_cross":0.4458,"f2_mix_pen":0.4499,"f2_mix_lshot":0.1043,"f3_space":0.5498,"f3_cross_ok":0.4158,"f4_block":0.4151,"f4_cross_blk":0.2235,"f5_aggr":0.8914,"f6_err":0.3776,"corner_rate":0.5329}},"yield":{"db":0.342,"dc":0.1285,"dg":0.0456,"do":0.0,"dx":0.0071,"d":0.1266,"eb":0.0737,"ec":0.0795,"eg":0.0111,"eo":0.0,"ex":0.0046,"e":0.0414,"p":0.0386,"po":0.0,"pl":0.0613,"l":0.1004,"lb":0.1899,"lp":0.4821,"lh":0.0,"lx":0.0024,"lz":0.0,"s":0.1242,"sb":0.3035,"sp":0.3792,"sh":0.0,"sx":0.0093,"sz":0.0},"side":{"0":{"corners_half":2.862,"arr_half":19.3},"1":{"corners_half":2.21,"arr_half":16.042}},"origins":{"传中被挡":0.2425,"突破渗透被断":0.1523,"传中被解围":0.1428,"其他":0.1379,"禁区射门被挡":0.0907,"禁区射门被扑出":0.0774,"远射被挡":0.053,"远射被扑出":0.0377,"角球后（连角球）":0.0256,"任意球后":0.0199,"传中被门将处理":0.0059,"禁区射门偏出":0.0052,"界外球后":0.0046,"传中失误":0.0036,"远射偏出":0.001},"fwd":{"b0":0.8879,"mu":[3.6135,0.8825,0.4204,0.5395,0.3877,0.3018],"sd":[1.0612,0.211,0.1061,0.1366,0.1169,0.1207],"beta":[0.188,0.0733,0.0102,-0.0272,0.0247,0.0009],"prior":{"arr_rate":3.714,"aggr":0.891,"block":0.415,"space":0.55,"err":0.378,"deep":0.3},"h1":0.933,"len":[46.3,48.8]},"check":{"fwd_corr":{"平均":0.077,"上半场角球":0.203,"上半场六项":0.322,"角球＋六项":0.322,"角球＋六项＋主客＋比分":0.322,"角球＋主客＋比分":0.171},"fwd_mae":{"平均":1.547,"上半场角球":1.503,"上半场六项":1.401,"角球＋六项":1.401,"角球＋六项＋主客＋比分":1.405,"角球＋主客＋比分":1.513}},"period":{"1":{"corners":2.381,"arr":16.686,"cross":9.383,"mins":46.337},"2":{"corners":2.691,"arr":18.656,"cross":10.412,"mins":48.833}},"proj":{"six":{"b0":0.89688,"beta":[0.15872,0.06186,0.00565,-0.01892,0.01456,-0.00927,-0.00058],"mu":[3.72006,0.89333,0.41628,0.54474,0.38238,0.30061,0.56522],"sd":[1.0203,0.22393,0.11223,0.11329,0.10365,0.1007,0.22141]},"net":{"b0":0.88455,"beta":[0.08753,0.0305,-0.00634,-0.00548,-0.00477,-0.01468,0.00771,0.00676,0.04938,-0.00907,-0.00308,0.11759,-0.08956,0.06934,0.00234],"mu":[3.72006,0.89333,0.41628,0.54474,0.38238,0.30061,2.34094,2.34094,5.5567,1.38183,1.88341,0.5,0.28633,0.28633,0.56522],"sd":[1.0203,0.22393,0.11223,0.11329,0.10365,0.1007,1.8507,1.8507,3.02944,1.4153,1.5738,0.15009,0.45205,0.45205,0.22141]},"prior":{"arr_rate":3.714,"aggr":0.891,"block":0.415,"space":0.55,"err":0.378,"deep":0.3}}};
+var BASE = {"src":"StatsBomb Open Data 2015/16 英超、西甲、意甲、法甲","n":{"matches":1517,"halves":6068},"half":{"f1_rate":{"m":3.7119,"q":[2.6606,3.3285,3.9554,4.7647]},"f1_share":{"m":0.5,"q":[0.3714,0.4615,0.5385,0.6286]},"f2_cross":{"m":0.5512,"q":[0.3846,0.5,0.5909,0.7143]},"f2_dcross":{"m":0.3857,"q":[0.2414,0.3333,0.4167,0.5238]},"f2_ecross":{"m":0.1655,"q":[0.0714,0.129,0.1818,0.25]},"f2_deep_share":{"m":0.3002,"q":[0.1538,0.25,0.3333,0.4409]},"f2_pen":{"m":0.5661,"q":[0.4,0.5,0.6,0.7222]},"f2_lshot":{"m":0.1339,"q":[0.0556,0.1,0.1429,0.2083]},"f2_mix_cross":{"m":0.4404,"q":[0.3333,0.4115,0.4737,0.5455]},"f2_mix_pen":{"m":0.4518,"q":[0.3462,0.4182,0.48,0.5556]},"f2_mix_lshot":{"m":0.1078,"q":[0.0455,0.08,0.1176,0.1667]},"f3_space":{"m":0.5418,"q":[0.375,0.5,0.6,0.7059]},"f3_cross_ok":{"m":0.4107,"q":[0.2,0.3333,0.5,0.6]},"f4_block":{"m":0.4215,"q":[0.3182,0.3846,0.4483,0.5217]},"f4_cross_blk":{"m":0.227,"q":[0.0909,0.1667,0.25,0.3333]},"f5_aggr":{"m":0.8862,"q":[0.6667,0.8125,0.9355,1.0946]},"f6_err":{"m":0.3921,"q":[0.2632,0.3333,0.4167,0.5]},"corner_rate":{"m":0.5323,"q":[0.208,0.4146,0.6122,0.8373]},"vol":{"arr":17.671,"arrB":24.372,"arr80":22.217,"cross":9.898,"cross_blk":2.212,"cross_clr":3.2,"cross_gk":0.442,"cross_ok":2.591,"cross_bad":1.453,"pen":9.991,"pen_ok":3.693,"pen_lost":6.298,"lshot":2.316,"lshot_blk":0.708,"lshot_hold":0.326,"lshot_parry":0.198,"lshot_off":1.014,"lshot_goal":0.07,"bshot":3.539,"bshot_blk":0.757,"bshot_hold":0.355,"bshot_parry":0.518,"bshot_off":1.412,"bshot_goal":0.497,"corners":2.536,"goals":0.656,"mins":47.585},"pooled":{"f1_rate":3.7136,"f1_share":0.5,"f2_cross":0.5601,"f2_dcross":0.3925,"f2_ecross":0.1676,"f2_deep_share":0.2992,"f2_pen":0.5654,"f2_lshot":0.1311,"f2_mix_cross":0.4458,"f2_mix_pen":0.4499,"f2_mix_lshot":0.1043,"f3_space":0.5498,"f3_cross_ok":0.4158,"f4_block":0.4151,"f4_cross_blk":0.2235,"f5_aggr":0.8914,"f6_err":0.3776,"corner_rate":0.5329}},"match":{"f1_rate":{"m":3.714,"q":[2.8322,3.3924,3.9316,4.6117]},"f1_share":{"m":0.5,"q":[0.3906,0.4643,0.5357,0.6094]},"f2_cross":{"m":0.5508,"q":[0.4167,0.5111,0.5891,0.6765]},"f2_dcross":{"m":0.3851,"q":[0.28,0.3462,0.4103,0.4857]},"f2_ecross":{"m":0.1657,"q":[0.0976,0.1429,0.1818,0.2292]},"f2_deep_share":{"m":0.3009,"q":[0.2,0.2667,0.3333,0.4]},"f2_pen":{"m":0.5634,"q":[0.4375,0.5145,0.5909,0.6812]},"f2_lshot":{"m":0.1326,"q":[0.0741,0.1081,0.1429,0.1875]},"f2_mix_cross":{"m":0.4412,"q":[0.3609,0.4182,0.4654,0.5238]},"f2_mix_pen":{"m":0.4517,"q":[0.3736,0.425,0.4737,0.5323]},"f2_mix_lshot":{"m":0.1071,"q":[0.0606,0.0889,0.1143,0.1489]},"f3_space":{"m":0.5459,"q":[0.4348,0.5128,0.5833,0.6667]},"f3_cross_ok":{"m":0.4123,"q":[0.2727,0.3684,0.4444,0.5556]},"f4_block":{"m":0.4206,"q":[0.3448,0.3958,0.4412,0.5]},"f4_cross_blk":{"m":0.2266,"q":[0.1359,0.1905,0.25,0.3125]},"f5_aggr":{"m":0.8837,"q":[0.72,0.8293,0.9286,1.0385]},"f6_err":{"m":0.3877,"q":[0.2941,0.3529,0.4091,0.4706]},"corner_rate":{"m":0.5327,"q":[0.309,0.4216,0.5423,0.7476]},"vol":{"arr":35.342,"arrB":48.744,"arr80":44.434,"cross":19.795,"cross_blk":4.424,"cross_clr":6.4,"cross_gk":0.884,"cross_ok":5.183,"cross_bad":2.905,"pen":19.982,"pen_ok":7.385,"pen_lost":12.596,"lshot":4.632,"lshot_blk":1.416,"lshot_hold":0.653,"lshot_parry":0.397,"lshot_off":2.027,"lshot_goal":0.139,"bshot":7.077,"bshot_blk":1.515,"bshot_hold":0.709,"bshot_parry":1.035,"bshot_off":2.825,"bshot_goal":0.993,"corners":5.072,"goals":1.311,"mins":95.169},"pooled":{"f1_rate":3.7136,"f1_share":0.5,"f2_cross":0.5601,"f2_dcross":0.3925,"f2_ecross":0.1676,"f2_deep_share":0.2992,"f2_pen":0.5654,"f2_lshot":0.1311,"f2_mix_cross":0.4458,"f2_mix_pen":0.4499,"f2_mix_lshot":0.1043,"f3_space":0.5498,"f3_cross_ok":0.4158,"f4_block":0.4151,"f4_cross_blk":0.2235,"f5_aggr":0.8914,"f6_err":0.3776,"corner_rate":0.5329}},"yield":{"db":0.342,"dc":0.1285,"dg":0.0456,"do":0.0,"dx":0.0071,"d":0.1266,"eb":0.0737,"ec":0.0795,"eg":0.0111,"eo":0.0,"ex":0.0046,"e":0.0414,"p":0.0386,"po":0.0,"pl":0.0613,"l":0.1004,"lb":0.1899,"lp":0.4821,"lh":0.0,"lx":0.0024,"lz":0.0,"s":0.1242,"sb":0.3035,"sp":0.3792,"sh":0.0,"sx":0.0093,"sz":0.0},"side":{"0":{"corners_half":2.862,"arr_half":19.3},"1":{"corners_half":2.21,"arr_half":16.042}},"origins":{"传中被挡":0.2425,"突破渗透被断":0.1523,"传中被解围":0.1428,"其他":0.1379,"禁区射门被挡":0.0907,"禁区射门被扑出":0.0774,"远射被挡":0.053,"远射被扑出":0.0377,"角球后（连角球）":0.0256,"任意球后":0.0199,"传中被门将处理":0.0059,"禁区射门偏出":0.0052,"界外球后":0.0046,"传中失误":0.0036,"远射偏出":0.001},"fwd":{"b0":0.8879,"mu":[3.6135,0.8825,0.4204,0.5395,0.3877,0.3018],"sd":[1.0612,0.211,0.1061,0.1366,0.1169,0.1207],"beta":[0.188,0.0733,0.0102,-0.0272,0.0247,0.0009],"prior":{"arr_rate":3.714,"aggr":0.891,"block":0.415,"space":0.55,"err":0.378,"deep":0.3},"h1":0.933,"len":[46.3,48.8]},"check":{"fwd_corr":{"平均":0.077,"上半场角球":0.203,"上半场六项":0.322,"角球＋六项":0.322,"角球＋六项＋主客＋比分":0.322,"角球＋主客＋比分":0.171},"fwd_mae":{"平均":1.547,"上半场角球":1.503,"上半场六项":1.401,"角球＋六项":1.401,"角球＋六项＋主客＋比分":1.405,"角球＋主客＋比分":1.513}},"period":{"1":{"corners":2.381,"arr":16.686,"cross":9.383,"mins":46.337},"2":{"corners":2.691,"arr":18.656,"cross":10.412,"mins":48.833}},"proj":{"prior":{"arr_rate":3.714,"aggr":0.891,"block":0.415,"space":0.55,"err":0.378,"deep":0.3},"cb":{"bin":[0.034936,0.046015,0.043645,0.045262,0.043231,0.042883,0.042359,0.045899,0.045682,0.063527,0.041233,0.050224,0.052769,0.049025,0.047032,0.046438,0.048075,0.047778,0.048937,0.053657],"home":1.2998,"state":[1.0859,1.124,1.0,0.76832,0.73417],"clu":1.3596,"cluSec":180,"man":[0.59119,1.0,1.3596],"goal":[[0.010869,0.014283],[0.012811,0.017279]]},"add":[4,6],"six":{"b0":-0.013961690111167591,"beta":[0.11648203648242637,0.038026748261013446,-0.011297715994981737,0.007857909290754896,-0.008367959640816672,-0.016023803792160916],"mu":[3.699096752355391,0.8953937922200891,0.41601200455139675,0.5458000430778357,0.38256330126928867,0.30057441007913105],"sd":[1.0062255847681705,0.2217924507789507,0.11060381313288395,0.11237322574907302,0.10260539648261394,0.09992350497807789],"names":["到达每10分","心态","被挡率","禁区内空间","失误率","45度占比"]},"net":{"b0":-0.018640931438654838,"beta":[0.060457563858757675,0.015166573930616246,-0.01088661942325627,0.0002726869413571177,-0.007164764868257415,-0.014071415220257514,0.006281612995768214,0.008613742681274236,0.03492031407231513,0.008425669269488772,0.005446801062975439,0.0903658151673993],"mu":[3.699096752355391,0.8953937922200891,0.41601200455139675,0.5458000430778357,0.38256330126928867,0.30057441007913105,2.3367110863495126,2.3367110863495126,5.555207094272247,1.3809433482122648,1.8834218911915737,0.5],"sd":[1.0062255847681705,0.2217924507789507,0.11060381313288395,0.11237322574907302,0.10260539648261394,0.09992350497807789,1.85982394918853,1.85982394918853,3.0466975101761364,1.4216716265347071,1.5818492500042531,0.15028398074983215],"names":["到达每10分","心态","被挡率","禁区内空间","失误率","45度占比","角球/45","对方角球/45","射门/45","被挡射门/45","射正/45","控球"]},"check":{"full":{"half":{"base":0.197,"sb":0.267,"six":0.251,"net":0.26},"match":{"base":0.243,"sb":0.32,"six":0.302,"net":0.309}},"10":{"half":{"base":0.203,"sb":0.243,"six":0.232,"net":0.257},"match":{"base":0.246,"sb":0.289,"six":0.281,"net":0.306}},"20":{"half":{"base":0.213,"sb":0.266,"six":0.253,"net":0.269},"match":{"base":0.249,"sb":0.308,"six":0.298,"net":0.312}}}},"rate":{"1":[{"ar":0.39741,"db":0.040417,"dc":0.052096,"dg":0.006444,"do":0.040829,"dx":0.021695,"eb":0.012761,"ec":0.023957,"eg":0.003386,"eo":0.018124,"ex":0.011978,"po":0.077348,"pl":0.135505,"lb":0.016104,"lp":0.004239,"lh":0.007042,"lx":0.022364,"lz":0.001508,"sb":0.015791,"sp":0.011153,"sh":0.00791,"sx":0.032037,"sz":0.010627,"ck":0.058214},{"ar":0.322807,"db":0.029861,"dc":0.038738,"dg":0.004823,"do":0.030188,"dx":0.017854,"eb":0.009745,"ec":0.017441,"eg":0.002376,"eo":0.012932,"ex":0.009347,"po":0.061457,"pl":0.112714,"lb":0.012334,"lp":0.003571,"lh":0.005975,"lx":0.01875,"lz":0.001238,"sb":0.012661,"sp":0.00882,"sh":0.005819,"sx":0.023573,"sz":0.008152,"ck":0.044557}],"2":[{"ar":0.413368,"db":0.040133,"dc":0.05347,"dg":0.007573,"do":0.046194,"dx":0.023218,"eb":0.01196,"ec":0.023272,"eg":0.003739,"eo":0.020168,"ex":0.010759,"po":0.0934,"pl":0.149961,"lb":0.016739,"lp":0.005062,"lh":0.007775,"lx":0.023785,"lz":0.001701,"sb":0.019803,"sp":0.012919,"sh":0.008828,"sx":0.035502,"sz":0.013175,"ck":0.061961},{"ar":0.350705,"db":0.031142,"dc":0.040241,"dg":0.005737,"do":0.034652,"dx":0.017333,"eb":0.009908,"ec":0.019655,"eg":0.002983,"eo":0.014403,"ex":0.009908,"po":0.077363,"pl":0.130401,"lb":0.014268,"lp":0.003766,"lh":0.006601,"lx":0.020235,"lz":0.001404,"sb":0.01524,"sp":0.010529,"sh":0.007195,"sx":0.027417,"sz":0.009679,"ck":0.048232}]}};
 </script>
 <script>
 (function(){
@@ -522,7 +539,7 @@ const ok = v => typeof v === 'number' && isFinite(v);
 const f1 = v => ok(v) ? v.toFixed(1) : '—';
 const f2 = v => ok(v) ? v.toFixed(2) : '—';
 const pc = v => ok(v) ? Math.round(v * 100) + '%' : '—';
-const APPVER = 'v3';
+const APPVER = 'v4';
 const LS = {
   get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e){ return d; } },
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e){ return false; } }
@@ -848,17 +865,16 @@ function sixOf(m, i, scope){
   r.xc = xcOf(cSeen);
   return r;
 }
-/* 接下来的角球：每队每分钟几个。没连联网时只用你记的六项；连上联网时再加上联网的角球、射门、被挡射门、射正、控球和比分。
-   两个模型都用 2015/16 五大联赛（缺德甲）建立，在 2018–2024 国际大赛上检验（见 dev/model/six_join2.py） */
-const PROJ_MIN = 8;   // 没连联网时，看了几分钟以后才显示“接下来”
-function matchMin(m){ const p = m.tm.ht ? 1 : m.tm.p, c = m.tm.ht ? (m.pe[1] || PER[1][1]) : clockOf(m); return (p === 1 ? Math.min(c, PER[1][1]) : c) / 60; }
+/* 接下来的角球：用“角球数据记录”的分钟模型——半场里的时段（补时角球多）、主客场、比分（领先的一方角球少、落后的多）、
+   人数（红牌）、刚有角球（3 分钟内容易再来一个），连之后的进球也一起模拟——再乘上你记的六项（连上联网时加上联网的
+   角球、射门、被挡射门、射正、控球）。倍数用 2015/16 四个联赛建立，留一联赛检验（见 dev/model/six_cbase.py） */
 function sixFeats(m, i){
   const P0 = BASE.proj.prior, P = parts(tally(m, i, 'ft'), tally(m, 1 - i, 'ft'), minsOf(m, 'ft')), g = P.g;
   return [(P.ar + P0.arr_rate) / (P.mins + 10) * 10, (P.f5[0] + P0.aggr * 4) / (P.f5[1] + 4), (P.f4[0] + P0.block * 4) / (P.f4[1] + 4),
     (P.f3[0] + P0.space * 4) / (P.f3[1] + 4), (P.f6[0] + P0.err * 4) / (P.f6[1] + 4), (g.e + P0.deep * 4) / (g.d + g.e + 4)];
 }
 /* 联网的数字可以用：最近 30 分钟内同步过、比赛进行中、有角球、射门和控球。
-   手动同步也够用：用半小时前的联网数据，估计照样比只用六项准（国际大赛检验，相关系数 0.50–0.56 对 0.47–0.52） */
+   手动同步也够用：用半小时前的联网数据，估计照样比只用六项准 */
 function apiFeats(m, i){
   const a = m.api;
   if (!a || !a.ck || !a.sh || !a.pos || !a.el || m.st === 2) return null;
@@ -866,22 +882,87 @@ function apiFeats(m, i){
   const k = 45 / Math.max(1, a.el + (a.ex || 0));
   return [a.ck[i] * k, a.ck[1 - i] * k, a.sh[i].t * k, a.sh[i].b * k, a.sh[i].on * k, a.pos[i] / 100];
 }
-function projRate(m, i){
-  const P = BASE.proj, six = sixFeats(m, i), api = apiFeats(m, i), sc = score(m);
-  const model = api ? P.net : P.six;
-  const x = api ? six.concat(api, [sc[i] > sc[1 - i] ? 1 : 0, sc[i] < sc[1 - i] ? 1 : 0], [matchMin(m) / 90]) : six.concat([matchMin(m) / 90]);
-  let eta = model.b0; for (let j = 0; j < x.length; j++) eta += model.beta[j] * (x[j] - model.mu[j]) / model.sd[j];
-  return { rate: Math.exp(eta) / 45, net: !!api };
+/* 六项（＋联网）倍数，分开六项和联网各自的部分 */
+function projMult(m, i){
+  const P = BASE.proj, six = sixFeats(m, i), api = apiFeats(m, i), mod = api ? P.net : P.six, x = api ? six.concat(api) : six;
+  let a = mod.b0, b = 0;
+  for (let j = 0; j < x.length; j++){ const v = mod.beta[j] * (x[j] - mod.mu[j]) / mod.sd[j]; if (j < 6) a += v; else b += v; }
+  return { m: Math.exp(a + b), six: Math.exp(a), api: api ? Math.exp(b) : null };
 }
-function projection(m, i){
-  if (m.st === 2) return null;
-  if (!apiFeats(m, i) && minsOf(m, 'ft') < PROJ_MIN) return null;
-  const p = curP(), r = projRate(m, i);
-  const sp = halfSpan(m, p), el = sp ? (sp[1] - PER[p][0]) / 60 : Math.max(0, clockOf(m) - PER[p][0]) / 60;
-  const remH = m.tm.ht ? 0 : Math.max(0, BASE.fwd.len[p - 1] - el);
-  const remF = remH + (p === 1 ? BASE.fwd.len[1] : 0);
-  const cH = tally(m, i, 'h' + p, true).ck || 0, cF = tally(m, i, 'ft', true).ck || 0;
-  return { p: p, per10: r.rate * 10, half: cH + remH * r.rate, remH: remH * r.rate, ft: cF + remF * r.rate, net: r.net, live: true };
+function pRng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function pPois(lam, rnd){ if (lam <= 0) return 0; const L = Math.exp(-lam); let k = 0, q = 1; do { k++; q *= rnd(); } while (q > L); return k - 1; }
+const stIdx = d => d <= -2 ? 0 : d === -1 ? 1 : d === 0 ? 2 : d === 1 ? 3 : 4;
+/* 模拟剩下的时间（跟角球数据记录一样：每分钟按比分、人数、刚有角球算两队的角球，也模拟进球让比分变化）。
+   half/t0 本半场与已过秒数；sc、rd、last、mult 都是 [主, 客]；end 本半场结束秒数；end2 有的话接着模拟下半场 */
+function pSim(half, t0, sc, rd, last, end, mult, n, end2){
+  const P = BASE.proj.cb, rnd = pRng(2015), man = [Math.sign(rd[1] - rd[0]), Math.sign(rd[0] - rd[1])];
+  const segs = [[half, t0, end]].concat(end2 ? [[2, 0, end2]] : []), sH = [0, 0], sA = [0, 0];
+  for (let s = 0; s < n; s++){
+    let g0 = sc[0], g1 = sc[1], l0 = last[0] == null ? -1e9 : last[0], l1 = last[1] == null ? -1e9 : last[1];
+    for (let si = 0; si < segs.length; si++){
+      const hf = segs[si][0], se = segs[si][2], gH = P.goal[hf - 1][1], gA = P.goal[hf - 1][0];
+      let t = segs[si][1];
+      if (si > 0){ l0 = -1e9; l1 = -1e9; }
+      while (t < se - 1e-9){
+        const mi = Math.floor(t / 60), step = Math.min(60 - (t - mi * 60), se - t), dt = step / 60;
+        const b = P.bin[(hf - 1) * 10 + Math.min(Math.floor(mi / 5), 9)];
+        for (let i = 0; i < 2; i++){
+          const lc = i === 0 ? l0 : l1;
+          const k = pPois(b * (i === 0 ? P.home : 1) * P.man[man[i] + 1] * P.state[stIdx(i === 0 ? g0 - g1 : g1 - g0)] * (t - lc <= P.cluSec ? P.clu : 1) * mult[i] * dt, rnd);
+          if (k > 0){ if (si === 0) sH[i] += k; sA[i] += k; if (i === 0) l0 = t + step / 2; else l1 = t + step / 2; }
+          const g = pPois((i === 0 ? gH : gA) * dt, rnd);
+          if (i === 0) g0 += g; else g1 += g;
+        }
+        t += step;
+      }
+    }
+  }
+  return { h: [sH[0] / n, sH[1] / n], all: [sA[0] / n, sA[1] / n] };
+}
+let pCache = { key: '', skey: '', mult: null, v: null }, pTimer = 0;
+/* 两队“接下来”：本半场还有几个、全场大概几个、每 10 分钟几个，以及各项倍数（显示用） */
+function projAll(m){
+  if (m !== M || m.st === 2 || !(m.tm.r || m.tm.b || m.tm.ht)) return null;
+  const P = BASE.proj.cb, ht = !!m.tm.ht, p = ht ? 2 : m.tm.p;
+  const t0 = ht ? 0 : Math.max(0, clockOf(m) - PER[p][0]);
+  let end = (45 + BASE.proj.add[p - 1]) * 60;
+  if (t0 > end - 15) end = t0 + 30;
+  const end2 = p === 1 ? (45 + BASE.proj.add[1]) * 60 : 0;
+  const sc = score(m), rd = [0, 1].map(i => tally(m, i, 'ft', true).rc || 0), last = [null, null];
+  if (!ht) for (const e of m.ev) if (e.c === 'ck' && !e.b && e.p === p){ const x = e.t - PER[p][0]; if (x <= t0 + 1 && (last[e.i] == null || x > last[e.i])) last[e.i] = x; }
+  const mu = [projMult(m, 0), projMult(m, 1)], mult = mu.map(x => x.m);
+  const skey = [m.id, p, Math.floor(t0 / 10), end, sc, rd, last].join('|'), key = skey + '|' + mult.map(x => x.toFixed(3)).join(',');
+  let r;
+  if (pCache.key === key) r = pCache.v;
+  else if (pCache.skey === skey && pCache.v){
+    // 刚记了一个动作、只有倍数变了：先按倍数换算（点按键不会卡），停手 0.4 秒后再完整模拟一次
+    const f = [mult[0] / pCache.mult[0], mult[1] / pCache.mult[1]], v = pCache.v;
+    r = { h: [v.h[0] * f[0], v.h[1] * f[1]], all: [v.all[0] * f[0], v.all[1] * f[1]] };
+    clearTimeout(pTimer);
+    pTimer = setTimeout(() => { pCache = { key: key, skey: skey, mult: mult, v: pSim(p, t0, sc, rd, last, end, mult, 2000, end2) }; renderHud(); renderMid(); }, 400);
+  } else {
+    clearTimeout(pTimer);
+    r = pSim(p, t0, sc, rd, last, end, mult, 2000, end2);
+    pCache = { key: key, skey: skey, mult: mult, v: r };
+  }
+  const remMin = Math.max(0.5, (end - t0) / 60);
+  return [0, 1].map(i => {
+    const d = sc[i] - sc[1 - i], man = Math.sign(rd[1 - i] - rd[i]);
+    return { p: p, per10: r.h[i] / remMin * 10, remH: r.h[i], half: (tally(m, i, 'h' + p, true).ck || 0) + r.h[i], ft: (tally(m, i, 'ft', true).ck || 0) + r.all[i],
+      net: mu[i].api != null, live: true,
+      fac: { d: d, st: P.state[stIdx(d)], man: man, mf: P.man[man + 1], clu: last[i] != null && t0 - last[i] <= P.cluSec ? P.clu : 1, six: mu[i].six, api: mu[i].api } };
+  });
+}
+function projection(m, i){ const A = projAll(m); return A ? A[i] : null; }
+/* 各项倍数，例如“落后1球 ×1.12 · 六项 ×1.05” */
+function facText(f){
+  const out = [], x = v => '×' + v.toFixed(2);
+  if (f.d !== 0) out.push((f.d > 0 ? '领先' : '落后') + Math.min(2, Math.abs(f.d)) + (Math.abs(f.d) >= 2 ? '球+' : '球') + ' ' + x(f.st));
+  if (f.man !== 0) out.push((f.man > 0 ? '多一人' : '少一人') + ' ' + x(f.mf));
+  if (f.clu !== 1) out.push('刚有角球 ' + x(f.clu));
+  out.push('六项 ' + x(f.six));
+  if (f.api != null) out.push('联网 ' + x(f.api));
+  return out.join(' · ');
 }
 /* 每个角球前 25 秒内同一队最后一个动作 */
 const SRCG = { db: '传中被挡', eb: '传中被挡', dc: '传中被解围', ec: '传中被解围', dg: '传中被门将处理', eg: '传中被门将处理', pl: '突破被断', lb: '射门被挡', sb: '射门被挡', lp: '射门被扑出', sp: '射门被扑出' };
@@ -944,6 +1025,36 @@ function tickClock(){
   const hs = $('#hudS');
   if (hs){ const idle = !run && !M.tm.b && M.st !== 2 && !M.tm.ht; hs.querySelector('small').textContent = M.tm.ht ? '下半场 ▶' : idle ? '开球 ▶' : M.st === 2 ? '已结束' : fmtClock(p, t); hs.classList.toggle('kick', !!M.tm.ht || idle); }
 }
+/* 跟平均比：公开数据里同样是主队（客队）的球队，在你看的这段时间里平均有几次（上下半场分开算） */
+function avgCnt(i, code, scope){
+  const R = BASE.rate; if (!R) return null;
+  let e = 0, mins = 0;
+  for (const p of scope === 'ft' ? [1, 2] : [+scope[1]]){
+    const sp = halfSpan(M, p); if (!sp) continue;
+    const mn = (sp[1] - sp[0]) / 60, r = R[p][i];
+    mins += mn;
+    e += mn * (ACT[code] ? ACT[code].o.reduce((x, o) => x + (r[code + o] || 0), 0) : (r[code] || 0));
+  }
+  return mins >= 1 ? e : null;
+}
+/* 差距够大才标箭头：(你的次数 − 平均) ÷ √(平均+1) 超过 ±1 */
+function avgParts(n, e){
+  if (e == null) return { cls: '', txt: '' };
+  const z = (n - e) / Math.sqrt(e + 1), up = z >= 1, dn = z <= -1;
+  return { cls: up ? ' up' : dn ? ' dn' : '', txt: '均' + (e < 9.95 ? e.toFixed(1) : Math.round(e)) + (up ? '↑' : dn ? '↓' : '') };
+}
+function avgTag(n, e){ const r = avgParts(n, e); return r.txt ? '<span class="av' + r.cls + '">' + r.txt + '</span>' : ''; }
+/* 按键上的：时间在走，平均跟着变，每 15 秒只更新这几个字（不重画按键） */
+function avgSpan(n, i, code, scope){
+  const r = avgParts(n, avgCnt(i, code, scope));
+  return '<span class="av' + r.cls + '" data-avi="' + i + '" data-avc="' + code + '" data-avn="' + n + '" data-avs="' + scope + '">' + r.txt + '</span>';
+}
+function renderAvgs(){
+  for (const el of $$('.pad .av[data-avc]')){
+    const r = avgParts(+el.dataset.avn, avgCnt(+el.dataset.avi, el.dataset.avc, el.dataset.avs));
+    el.className = 'av' + r.cls; el.textContent = r.txt;
+  }
+}
 /* 记录按键：iPad 一下就记到结果；手机先点动作，再在弹出的结果里选 */
 function cnt(c, k){ return c[k] || 0; }
 function renderPads(){
@@ -959,16 +1070,16 @@ function renderPads(){
     h += '<div class="board">';
     if (isPhone()){
       h += '<div class="acts">'
-        + '<button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span></button>'
-        + ACTS.map(a => '<button class="k" data-act="' + a + '" data-i="' + i + '"><span class="l">' + ACT[a].n + '</span><span class="c">' + g[a] + '</span></button>').join('')
-        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">' + FLAG.replace('<svg', '<svg width="16" height="16"') + ' 角球</span><span class="c">' + (c.ck || 0) + '</span></button>'
+        + '<button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span>' + avgSpan(g.ar, i, 'ar', scope) + '</button>'
+        + ACTS.map(a => '<button class="k" data-act="' + a + '" data-i="' + i + '"><span class="l">' + ACT[a].n + '</span><span class="c">' + g[a] + '</span>' + avgSpan(g[a], i, a, scope) + '</button>').join('')
+        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">' + FLAG.replace('<svg', '<svg width="16" height="16"') + ' 角球</span><span class="c">' + (c.ck || 0) + '</span>' + avgSpan(c.ck || 0, i, 'ck', scope) + '</button>'
         + ovHTML(i) + '</div>';
     } else {
-      h += '<div class="big2"><button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span></button>'
-        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">角球</span><span class="c">' + (c.ck || 0) + '</span></button></div>';
+      h += '<div class="big2"><button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span>' + avgSpan(g.ar, i, 'ar', scope) + '</button>'
+        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">角球</span><span class="c">' + (c.ck || 0) + '</span>' + avgSpan(c.ck || 0, i, 'ck', scope) + '</button></div>';
       for (const a of ACTS){
-        h += '<div class="row5' + (a === 'p' ? ' two' : '') + '"><div class="rl"><b>' + ACT[a].n + '</b><span>' + g[a] + '</span></div>'
-          + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-k="' + a + o + '" data-i="' + i + '"><span class="l">' + OUT[a][o] + '</span><span class="c">' + cnt(c, a + o) + '</span></button>').join('') + '</div>';
+        h += '<div class="row5' + (a === 'p' ? ' two' : '') + '"><div class="rl"><b>' + ACT[a].n + '</b><span>' + g[a] + '</span>' + avgSpan(g[a], i, a, scope) + '</div>'
+          + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-k="' + a + o + '" data-i="' + i + '"><span class="l">' + OUT[a][o] + '</span><span class="c">' + cnt(c, a + o) + '</span>' + avgSpan(cnt(c, a + o), i, a + o, scope) + '</button>').join('') + '</div>';
         if (a === 'e' || a === 'p') h += '<div class="sep"></div>';
       }
       h += '<div class="minor"><button class="k" data-k="og" data-i="' + i + '"><span class="l">对方乌龙</span><span class="c">' + cnt(c, 'og') + '</span></button>'
@@ -983,6 +1094,12 @@ let ov = null;   // { i, k (事件), a, until }
 let ovTimer = 0;
 function ovHTML(i){
   if (!ov || ov.i !== i) return '<div class="ov" hidden></div>';
+  if (ov.f){   // 传中到人之后：接着有没有禁区射门（包括头球）
+    const left = Math.max(0, ov.until - Date.now()), a = ov.f;
+    return '<div class="ov fol" data-i="' + i + '"><div class="ov-h"><b>接着射门？</b><button data-a="ovskip">没射门</button></div>'
+      + '<div class="ov-t"><i style="transition:transform ' + (left / 1000).toFixed(1) + 's linear"></i></div>'
+      + '<div class="ov-b">' + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-out="' + o + '"><span class="l">' + OUT[a][o] + '</span></button>').join('') + '</div></div>';
+  }
   const e = evByK(ov.k); if (!e) return '<div class="ov" hidden></div>';
   const a = e.c[0];
   const left = Math.max(0, ov.until - Date.now());
@@ -990,8 +1107,8 @@ function ovHTML(i){
     + '<div class="ov-t"><i style="transition:transform ' + (left / 1000).toFixed(1) + 's linear"></i></div>'
     + '<div class="ov-b">' + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-out="' + o + '"><span class="l">' + OUT[a][o] + '</span></button>').join('') + '</div></div>';
 }
-function openOv(i, e){
-  ov = { i: i, k: e.k, until: Date.now() + 8000 };
+function openOv(i, e, follow){
+  ov = follow ? { i: i, f: follow, until: Date.now() + 8000 } : { i: i, k: e.k, until: Date.now() + 8000 };
   clearTimeout(ovTimer); ovTimer = setTimeout(closeOv, 8000);
   renderPads();
   const bar = $('.ov[data-i="' + i + '"] .ov-t i');
@@ -1046,13 +1163,14 @@ function renderSix(){
   });
   h += '<tr><td class="fn">组合</td>' + R.map(r => '<td><span class="cmb">' + comboText(r) + '</span></td>').join('') + '</tr>';
   h += '<tr><td class="fn">角球<small>' + (R[0].ckb || R[1].ckb ? '看到的' : '实际') + ' / 动作折算</small></td>' + R.map(r => '<td><span class="ckv">' + r.ckw + '<small>折算 ' + f1(r.xc) + (r.ckb ? ' · 加入前 ' + r.ckb : '') + '</small></span></td>').join('') + '</tr>';
-  if (M.st !== 2 && (M.tm.r || M.tm.b || M.ev.length) && !projection(M, 0)){
-    h += '<tr><td class="fn">接下来<small>按六项估计</small></td><td colspan="2"><span class="proj">看满 ' + PROJ_MIN + ' 分钟后显示</span></td></tr>';
+  const pjA = M.st !== 2 ? projAll(M) : null;
+  if (M.st !== 2 && (M.tm.r || M.tm.b || M.ev.length) && !pjA){
+    h += '<tr><td class="fn">接下来<small>比分、时段＋六项</small></td><td colspan="2"><span class="proj">开球（按 ▶）后显示</span></td></tr>';
     h += '</tbody></table><p class="note">点任何一格可以看说明或手动评级。</p>';
-  } else if (M.st !== 2 && (M.tm.r || M.tm.b || M.ev.length)){
-    const pj = [projection(M, 0), projection(M, 1)];
-    h += '<tr><td class="fn">接下来<small>' + (pj[0].net ? '按六项＋联网估计' : '按六项估计') + '</small></td>' + pj.map(x => '<td><span class="proj">每10分 <b>' + f2(x.per10) + '</b><br>' + PER[x.p][2] + '约 <b>' + f1(x.half) + '</b><br>全场约 <b>' + f1(x.ft) + '</b></span></td>').join('') + '</tr>';
-    h += '</tbody></table><p class="note">两队' + PER[pj[0].p][2] + '角球约 <b>' + f1(pj[0].half + pj[1].half) + '</b> 个，全场约 <b>' + f1(pj[0].ft + pj[1].ft) + '</b> 个（平均每队每 10 分钟 ' + f2(BASE.half.corner_rate.m) + ' 个）。点任何一格可以看说明或手动评级。</p>';
+  } else if (pjA){
+    const pj = pjA;
+    h += '<tr><td class="fn">接下来<small>' + (pj[0].net ? '比分、时段＋六项＋联网' : '比分、时段＋六项') + '</small></td>' + pj.map(x => '<td><span class="proj">每10分 <b>' + f2(x.per10) + '</b><br>' + PER[x.p][2] + '约 <b>' + f1(x.half) + '</b><br>全场约 <b>' + f1(x.ft) + '</b></span><span class="fac">' + facText(x.fac) + '</span></td>').join('') + '</tr>';
+    h += '</tbody></table><p class="note">两队' + PER[pj[0].p][2] + '角球约 <b>' + f1(pj[0].half + pj[1].half) + '</b> 个，全场约 <b>' + f1(pj[0].ft + pj[1].ft) + '</b> 个。“接下来”用角球数据记录的模型算比分、时段、红牌和刚有角球的影响，再乘上六项' + (pj[0].net ? '和联网' : '') + '的倍数。点任何一格可以看说明或手动评级。</p>';
   } else {
     h += '</tbody></table><p class="note">点任何一格可以看说明或手动评级。等级 1–5 是跟' + (B.mine ? '你记录过的比赛' : '公开数据（' + esc(BASE.src) + '）') + '比的五等分，3 是中间。</p>';
   }
@@ -1061,24 +1179,23 @@ function renderSix(){
 function renderData(){
   const scope = scopeNow(), mins = minsOf(M, scope);
   const c = [tally(M, 0, scope), tally(M, 1, scope)], ca = [tally(M, 0, scope, true), tally(M, 1, scope, true)], g = c.map(groups);
-  const V = BASE.half.vol, pm = k => V[k] / V.mins * mins;
-  const deepShare = BASE.half.f2_deep_share.m;
-  const rows = [['到达', g[0].ar, g[1].ar, pm('arr')], ['下底传中', g[0].d, g[1].d, pm('cross') * (1 - deepShare)], ['45度传中', g[0].e, g[1].e, pm('cross') * deepShare],
-    ['突破渗透', g[0].p, g[1].p, pm('pen')], ['远射', g[0].l, g[1].l, pm('lshot')], ['禁区射门', g[0].s, g[1].s, pm('bshot')], ['角球', c[0].ck || 0, c[1].ck || 0, pm('corners')]];
+  const cell = (n, i, code) => '<td>' + n + avgTag(n, avgCnt(i, code, scope)) + '</td>';
+  const rows = [['到达', 'ar'], ['下底传中', 'd'], ['45度传中', 'e'], ['突破渗透', 'p'], ['远射', 'l'], ['禁区射门', 's'], ['角球', 'ck']];
+  const val = (i, k) => k === 'ar' ? g[i].ar : k === 'ck' ? (c[i].ck || 0) : g[i][k];
   const ckb = [(ca[0].ck || 0) - (c[0].ck || 0), (ca[1].ck || 0) - (c[1].ck || 0)];
   let h = '<div class="shead"><div class="seg">' + ['h1', 'h2', 'ft'].map(s => '<button data-a="scope" data-v="' + s + '" aria-pressed="' + (scope === s) + '">' + SCN[s] + '</button>').join('') + '</div><span class="sp"></span><span class="note">' + Math.round(mins) + ' 分钟</span></div>';
   h += apiLine();
-  h += '<table class="dt"><thead><tr><th>次数</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th><th>平均</th></tr></thead><tbody>';
-  for (const r of rows) h += '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td><td class="dim">' + f1(r[3]) + '</td></tr>';
+  h += '<table class="dt dt3"><thead><tr><th>次数（均＝平均）</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th></tr></thead><tbody>';
+  for (const r of rows) h += '<tr><td>' + r[0] + '</td>' + cell(val(0, r[1]), 0, r[1]) + cell(val(1, r[1]), 1, r[1]) + '</tr>';
   h += '</tbody></table>';
-  if (ckb[0] || ckb[1]) h += '<p class="note">角球只算你看到的这 ' + Math.round(mins) + ' 分钟，才能跟“平均”比；加入前另有 ' + ckb[0] + '–' + ckb[1] + '（算在比分栏的总数里）。</p>';
+  if (ckb[0] || ckb[1]) h += '<p class="note">角球只算你看到的这 ' + Math.round(mins) + ' 分钟，才能跟平均比；加入前另有 ' + ckb[0] + '–' + ckb[1] + '（算在比分栏的总数里）。</p>';
   h += '<table class="dt"><thead><tr><th>结果</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th><th>变角球</th></tr></thead><tbody>';
   for (const a of ACTS){
-    h += '<tr><td>' + ACT[a].n + '</td><td>' + g[0][a] + '</td><td>' + g[1][a] + '</td><td class="dim">' + pc(BASE.yield[a]) + '</td></tr>';
-    for (const o of ACT[a].o) h += '<tr class="sub"><td>' + OUT[a][o] + '</td><td>' + (c[0][a + o] || 0) + '</td><td>' + (c[1][a + o] || 0) + '</td><td class="dim">' + pc(BASE.yield[a + o]) + '</td></tr>';
+    h += '<tr><td>' + ACT[a].n + '</td>' + cell(g[0][a], 0, a) + cell(g[1][a], 1, a) + '<td class="dim">' + pc(BASE.yield[a]) + '</td></tr>';
+    for (const o of ACT[a].o) h += '<tr class="sub"><td>' + OUT[a][o] + '</td>' + cell(c[0][a + o] || 0, 0, a + o) + cell(c[1][a + o] || 0, 1, a + o) + '<td class="dim">' + pc(BASE.yield[a + o]) + '</td></tr>';
     if (c[0][a] || c[1][a]) h += '<tr class="sub"><td>结果没记</td><td>' + (c[0][a] || 0) + '</td><td>' + (c[1][a] || 0) + '</td><td class="dim"></td></tr>';
   }
-  h += '</tbody></table><p class="note">“平均”是公开数据里一队在同样时间里的平均次数；“变角球”是这种结果直接变成角球的机会。</p>';
+  h += '</tbody></table><p class="note">“均”是公开数据里同样是主队（或客队）的球队，在你看的这 ' + Math.round(mins) + ' 分钟里平均有几次，上下半场分开算；你的次数跟“均”比，就是频率跟平均比。↑ 是明显比平均多、↓ 是明显比平均少。“变角球”是这种结果直接变成角球的机会。</p>';
   $('#tabData').innerHTML = h;
 }
 function apiLine(){
@@ -1117,7 +1234,7 @@ function renderHud(){
       const v = r.show[k]; return v ? '<i class="v' + v + '">' + v + '</i>' : '<i class="na">–</i>';
     }).join('');
     h += '<button class="hud-c" data-a="six" style="color:inherit"><span class="ckn" style="color:var(--' + (i ? 'away' : 'home') + ')">' + r.ck + '<small>角球</small></span>'
-      + '<span class="pj">' + (pj ? '预计' + (pj.p === 1 ? '上' : '下') + '半 <b>' + f1(pj.half) + '</b> · 全 <b>' + f1(pj.ft) + '</b>' : M.st !== 2 ? '预计：' + PROJ_MIN + ' 分钟后' : '折算 <b>' + f1(r.xc) + '</b>') + '</span><span class="mini">' + mini + '</span></button>';
+      + '<span class="pj">' + (pj ? '预计' + (pj.p === 1 ? '上' : '下') + '半 <b>' + f1(pj.half) + '</b> · 全 <b>' + f1(pj.ft) + '</b>' : M.st !== 2 ? '预计：开球后' : '折算 <b>' + f1(r.xc) + '</b>') + '</span><span class="mini">' + mini + '</span></button>';
   }
   hud.innerHTML = h;
   tickClock();
@@ -1147,7 +1264,7 @@ setInterval(() => {
   tickClock();
   if (M.api && M.api.hold && M.api.hold.length) flushHold();
   if (M.api && apiKey() && NET.iv > 0 && M.st === 1 && isRecording() && !netBusy && sheet.hidden && LIVE_ST.indexOf(M.api.st) >= 0 && nowSec() - (M.api.at || 0) >= NET.iv) apiSync(false);
-  if (Date.now() - lastSlow > 15000 && M.tm.r){ lastSlow = Date.now(); renderMid(); renderHud(); }
+  if (Date.now() - lastSlow > 15000 && M.tm.r){ lastSlow = Date.now(); renderMid(); renderHud(); renderAvgs(); }
   if (sheetKind === 'join' && sheetData.tp && sheetData.tp.live) tpShow(sheetData.tp);
   if (sheetKind === 'clock'){ const b = $('#shClk'); if (b) b.textContent = M.tm.ht ? '中场' : fmtClock(M.tm.p, clockOf(M)); if (sheetData.tp && sheetData.tp.live) tpShow(sheetData.tp); }
 }, 1000);
@@ -1175,6 +1292,18 @@ function tapAct(i, a){
 function closeOvSilently(){ clearTimeout(ovTimer); ov = null; }
 function pickOut(o){
   if (!ov) return;
+  if (ov.f){   // 传中到人后接着的射门：现在记一个禁区射门
+    const i = ov.i, a = ov.f;
+    closeOvSilently();
+    if (ACT[a].o.indexOf(o) < 0) return;
+    const mg = GOALC.indexOf(a + o) >= 0 ? mergeAuto(i, 'gl') : false;
+    const e = addEv(i, a + o);
+    lastAdd = { k: e.k, i: i, at: Date.now() };
+    renderAll();
+    flash('.pad[data-i="' + i + '"] [data-act="' + a + '"]');
+    if (GOALC.indexOf(e.c) >= 0) showToast(teamName(i) + ' 进球 ' + score(M).join('–') + (mg ? '（跟联网补上的那球合并）' : ''));
+    return;
+  }
   const e = evByK(ov.k), i = ov.i;
   closeOvSilently();
   if (e && ACT[e.c[0]] && ACT[e.c[0]].o.indexOf(o) >= 0){
@@ -1183,6 +1312,8 @@ function pickOut(o){
   }
   renderAll();
   flash('.pad[data-i="' + i + '"] [data-act="' + (e ? e.c[0] : '') + '"]');
+  // 传中到人：多半接着有人射门（头球），直接给射门结果，省一次点“禁区射门”
+  if (e && (e.c === 'do' || e.c === 'eo') && isPhone()) openOv(i, null, 's');
 }
 function undoTeam(i){
   const e = lastOf(i); if (!e) return;
@@ -1205,9 +1336,11 @@ function openClock(){
   openSheet('clock', { tp: { p: p, v: clamp(v, TPR[p][0], TPR[p][1]), live: !!M.tm.r && !M.tm.ht, at: Date.now() } });
 }
 const HELP = {
-  pads: ['记录按键', '主画面两边的按键', '左边记主队控球时、右边记客队控球时发生的事。iPad 一下就点到结果；手机先点动作（例如“下底传中”），再在弹出的选单里点结果（被挡、解围……），8 秒没点就当“结果没记”，次数照样算。点错了按球队名字旁边的“撤销”，或在“全部事件”里改。'],
+  pads: ['记录按键', '主画面两边的按键', '左边记主队控球时、右边记客队控球时发生的事。iPad 一下就点到结果；手机先点动作（例如“下底传中”），再在弹出的选单里点结果（被挡、解围……），8 秒没点就当“结果没记”，次数照样算。传中选“到人”后会接着弹出射门结果（头球攻门就在这里点），没射门按“没射门”。按键上的“均 x”是平均球队在你看的同样时间里有几次，明显比平均多标 ↑、少标 ↓。点错了按球队名字旁边的“撤销”，或在“全部事件”里改。'],
   six: ['六项评估', 'iPad 中间卡片；手机上方摘要条或底部“六项”', '把你点的次数换成六项的等级（1–5），跟公开数据或你自己的记录比，3 是中间。时间短、次数少的时候会往平均拉，避免一开始乱跳。每一格都可以点开看说明，或改成你自己的手动评级。'],
-  proj: ['接下来', '六项表最下面、手机摘要条', '估计接下来每 10 分钟几个角球，以及这个半场和全场大概会有几个。没连联网时只用你记的六项（主要靠①到达和⑤心态）；连上联网时再加上联网的角球、射门、被挡射门、射正、控球和比分。模型用 2015/16 五大联赛（缺德甲）建立，在 2018–2024 国际大赛上检验：中途加入、只看几分钟时，只用六项的准确度（相关系数）是 0.15–0.28，加上联网是 0.31–0.39，跟从开球就看差不多甚至更准。'],
+  proj: ['接下来', '六项表最下面、手机摘要条', '估计接下来每 10 分钟几个角球，以及这个半场和全场大概会有几个。用的是“角球数据记录”的分钟模型：半场里的时段（补时阶段角球多）、主客场、比分（领先的一方角球少两成多，落后的多一成左右）、红牌（少一人的一方少约四成）、刚有角球（3 分钟内容易再来一个），连之后可能的进球也一起模拟；再乘上你记的六项的倍数（主要靠①到达和⑤心态），连上联网时再加上联网的角球、射门、被挡射门、射正和控球。表里会写出这些倍数。'
+    + '检验（2015/16 四个联赛，轮流拿一个联赛测试；预测本半场每队还剩几个角球，相关系数）：什么都不记、只按比分和时段 ' + f2(BASE.proj.check.full.half.base) + '；从开球看，只用六项 ' + f2(BASE.proj.check.full.half.six) + '、加联网 ' + f2(BASE.proj.check.full.half.net)
+    + '；中途加入看 10 分钟，只用六项 ' + f2(BASE.proj.check['10'].half.six) + '、加联网 ' + f2(BASE.proj.check['10'].half.net) + '。对照：角球数据记录 ' + f2(BASE.proj.check.full.half.sb) + ' / ' + f2(BASE.proj.check['10'].half.sb) + '。'],
   net: ['联网', '底部“同步”、功能 → 联网数据', '输入球队名字后自动在网上找这场比赛（API-Football，key 默认用角球数据记录里的那个）。比赛已经在踢时按“加入”，时间、比分、角球、红牌一次填好；记录时按“同步”，漏点的角球、进球、红牌会等画面追上后补上，你自己再点会自动合并，不会多算。联网的数字只用在比分、角球总数和“接下来”的估计，不会混进六项。'],
   xc: ['动作折算', '六项表、角球分页', '你记下的每个结果 × 这种结果变成角球的平均机会，加起来就是“按动作应该有几个角球”。远射被扑出约 48%、禁区射门被扑出约 38%、下底传中被挡约 34%，射偏、被没收几乎是 0。'],
   arch: ['比赛仓库', '底部“仓库”', '保存结束时选“加入仓库”的比赛，以及还没结束的比赛。可以搜索、打开、导出、删除；“统计”有平均进球、角球，你的六项平均跟公开数据对比，以及每一项不同等级的平均角球（检验你的逻辑）；“备份”可以导出全部（JSON 或表格 CSV）和导入。'],
@@ -1219,13 +1352,14 @@ const HELP = {
 const HELP_ORDER = ['pads', 'six', 'proj', 'xc', 'net', 'clock', 'fix', 'arch', 'base', 'pip'];
 const DEFS = [
   ['到达', '本队在对方禁区附近（禁区线外大约 10 米以内，或禁区两侧一直到底线的边路）把球控制住，点一次。同一次进攻在禁区附近来回传只点一次；对方把球抢走、控制住之后，再打过来才算新的一次。角球、任意球本身不算；角球或任意球被顶出来以后，本队在禁区附近又拿到球，算一次。', null],
-  ['下底传中', '在禁区线以内的边路（禁区两侧、靠近底线）传出的传中，倒三角也算。任意球、角球开出的不算。', ['被挡：刚传出就被附近（约 10 米内）的防守球员挡到', '解围：球到了禁区一带，被防守球员顶出、踢出或拦下', '门将：门将出击抱住或击出', '到人：队友先碰到球（头球、停球、射门都算）', '失误：直接出界、越位，或谁都没碰到']],
-  ['45度传中', '在禁区线以外的边路传出的传中（早传中、45 度传中）。结果跟下底传中一样。', null],
+  ['下底传中', '在禁区两侧、靠近底线的边路传出的传中，倒三角也算。分界线是禁区前沿那条线往边线延长：传球位置在这条线上（平齐）或更靠近底线，算下底传中；更靠近中场，算 45 度传中。任意球、角球开出的不算。', ['被挡：刚传出就被附近（约 10 米内）的防守球员挡到', '解围：球到了禁区一带，被防守球员顶出、踢出或拦下', '门将：门将出击抱住或击出', '到人：队友先碰到球（头球、停球、射门都算）。队友接着射门（包括头球攻门），再记一次禁区射门；手机上选“到人”后会直接弹出射门结果', '失误：直接出界、越位，或谁都没碰到']],
+  ['45度传中', '在禁区前沿那条线的延长线以外、更靠近中场的边路传出的传中（早传中、45 度传中）。结果跟下底传中一样。', null],
   ['突破渗透', '带球突破、直塞、短传配合往禁区里打（不是传中），包括在底线附近带球想突破。', ['成功：带球进了禁区，或队友在禁区里接到球', '被断：被抢断、拦截、挡下（包括在底线附近被断）']],
   ['远射', '禁区外射门。任意球直接射门不算。', ['被挡：被防守球员挡到', '扑出：门将扑到但没抱住（扑出、托出、扑到门柱）', '没收：门将直接抱住', '射偏：偏出、打高、中柱弹出', '进球']],
   ['禁区射门', '禁区内射门，包括角球后的头球。点球不算，点球进了用“补录比分”记。结果跟远射一样。', null],
   ['角球', '本队得到角球就点（开出的时候点也可以）。app 会自动找角球前 25 秒内同一队最后一个动作，当作这个角球的来源。', null],
-  ['对方乌龙、红牌', '对方乌龙算本队进球。红牌只记录，不影响六项。（手机上在“补录比分和角球”里记。）', null]
+  ['对方乌龙、红牌', '对方乌龙算本队进球。红牌不影响六项，但会用在“接下来”：少一人的一方角球少约四成。（手机上在“补录比分和角球”里记。）', null],
+  ['按键上的“均”', '公开数据里同样是主队（或客队）的球队，在你看的同样时间里平均有几次（上下半场分开算），你的次数跟它比就是频率跟平均比。明显比平均多标 ↑，明显比平均少标 ↓。', null]
 ];
 
 function renderSheet(){
@@ -1288,7 +1422,8 @@ function renderSheet(){
         + '<div><h4>公开数据告诉我们的</h4><p>' + esc(BASE.src) + '，' + BASE.n.matches + ' 场。其他条件一样时，从最低两成到最高两成：①到达让角球多约 59%、⑤心态多约 41%、④被挡多约 16%；③禁区内空间大、45 度传中多，角球反而少一些；⑥质量的影响很小，因为“传中打在第一个人身上”既是质量差，又是最多角球的来源。</p></div>'
         + '<div><h4>角球从哪里来</h4><table class="yt"><tbody>' + orig + '</tbody></table></div>'
         + '<div><h4>每种结果变成角球的机会</h4><table class="yt"><tbody>' + [['远射被扑出', 'lp'], ['禁区射门被扑出', 'sp'], ['下底传中被挡', 'db'], ['禁区射门被挡', 'sb'], ['远射被挡', 'lb'], ['下底传中被解围', 'dc'], ['45度传中被解围', 'ec'], ['45度传中被挡', 'eb'], ['突破渗透被断', 'pl'], ['下底传中被门将处理', 'dg'], ['射门偏出', 'sx'], ['射门被没收、进球、到人', 'sh']].map(x => '<tr><td>' + x[0] + '</td><td>' + pc(Y[x[1]]) + '</td></tr>').join('') + '</tbody></table></div>'
-        + '<div><h4>中途加入、联网</h4><p>模拟在第 15–70 分钟加入、自己再看 5–15 分钟，预测之后每队还有几个角球（国际大赛检验）：只用你看的这几分钟六项，相关系数 0.15–0.28；只用联网的加入前数据 0.23–0.34；两个加起来再加比分 0.31–0.39；对照：从开球就看、只用六项 0.23–0.34。联网里有用的是射门、射正、控球和比分，加入前有几个角球本身帮助很小。不用一直同步：半小时内按过一次“同步”，“接下来”就会用上联网的数据（用半小时前的数据，照样比只用六项准）。</p></div>'
+        + '<div><h4>接下来、中途加入、联网</h4><p>“接下来”的检验（2015/16 四个联赛，轮流拿一个联赛测试，预测本半场每队还剩几个角球，相关系数）：从开球看，只用六项 ' + f2(BASE.proj.check.full.half.six) + '、加联网 ' + f2(BASE.proj.check.full.half.net) + '；中途加入看 10 分钟，只用六项 ' + f2(BASE.proj.check['10'].half.six) + '、加联网 ' + f2(BASE.proj.check['10'].half.net)
+        + '；看 20 分钟，' + f2(BASE.proj.check['20'].half.six) + '、' + f2(BASE.proj.check['20'].half.net) + '。什么都不记、只按比分和时段是 ' + f2(BASE.proj.check.full.half.base) + '。联网里有用的主要是控球和射门。不用一直同步：半小时内按过一次“同步”，“接下来”就会用上联网的数据（用半小时前的数据，照样比只用六项准）。</p></div>'
         + '<div><h4>等级怎么定</h4><p>每一项都跟基准的五等分比：最低两成是 1、最高两成是 5。时间短、次数少的时候会往平均拉一点；次数太少就先显示“—”。点任何一格可以改成你自己的手动评级，统计时两种都会保存。</p></div>'
         + '</div>';
       break;
@@ -1414,7 +1549,7 @@ function renderSheet(){
     case 'net': {
       const used = (NET.used || {})[dayKey(new Date())] || 0, a = M.api, dl = myDelay();
       h = '<div class="card-h"><h3>联网数据</h3><button class="pill" data-a="close">完成</button></div>'
-        + '<p class="hint">输入球队名字后（填一队也行），自动在网上找这场比赛：中途加入时帮你填好时间、比分、角球和红牌；记录时按底部的“同步”，你漏点的角球、进球、红牌会等画面追上后补上（标“联网”）。联网的射门、控球和比分也会用在“接下来”的估计里，但不会混进六项。数据来源：API-Football、Wikidata。</p>'
+        + '<p class="hint">输入球队名字后（填一队也行），自动在网上找这场比赛：中途加入时帮你填好时间、比分、角球和红牌；记录时按底部的“同步”，你漏点的角球、进球、红牌会等画面追上后补上（标“联网”）。联网的角球、射门和控球也会用在“接下来”的估计里，但不会混进六项。数据来源：API-Football、Wikidata。</p>'
         + '<div class="lbl">API key</div>'
         + (keyFromSb() ? '<p class="netnote">现在用的是“角球数据记录”里的 API key（同一个网址共用，不用再填）。两个 app 共用每天的免费额度。要换成别的 key，贴在下面。</p>' : '')
         + '<input class="fi" id="netKey" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="' + (keyFromSb() ? '（用角球数据记录的 key）' : '贴上 API-Football 的 API key') + '" value="' + esc(NET.key) + '">'
@@ -1448,7 +1583,7 @@ function renderSheet(){
         + '<div class="jgrp"><h4>目前比分</h4>' + stp('sc', 0) + stp('sc', 1) + '</div>' + ck
         + '<div class="jgrp"><h4>红牌</h4>' + stp('rc', 0) + stp('rc', 1) + '</div>'
         + '<button class="pill green" data-a="jgo">' + (d.ht ? '从中场休息开始记录' : '从 <span id="jgoT">' + fmtClock(d.tp.p, d.tp.v) + '</span> 开始记录') + '</button>'
-        + '<p class="hint">加入前的比分、角球、红牌算进总数，但不算进六项。六项只算你从现在开始看到的；“接下来”的估计会同时用联网的射门、控球和比分。</p>';
+        + '<p class="hint">加入前的比分、角球、红牌算进总数，但不算进六项。六项只算你从现在开始看到的；“接下来”的估计会用比分和红牌，连上联网时再加上联网的角球、射门和控球。</p>';
       break;
     }
     case 'import':
@@ -1721,7 +1856,7 @@ const TEAM_ZH = ('阿森纳:Arsenal|切尔西:Chelsea|利物浦:Liverpool|曼联
   .split('|').map(x => { const [zh, en] = x.split(':'); return [zh.split('/'), en.split('/')]; });
 
 /* ================= 联网（API-Football，跟“角球数据记录”同一套） =================
-   只做两件事：帮你填好时间、比分、角球、红牌（中途加入、漏点的补上）；给“接下来”的估计多一份射门、控球和比分的资料。
+   只做两件事：帮你填好时间、比分、角球、红牌（中途加入、漏点的补上）；给“接下来”的估计多一份角球、射门和控球的资料。
    联网的数字不会混进六项。API key 默认用“角球数据记录”里的（同一个网址，读得到，不会改它的资料）。 */
 const API_BASE = 'https://v3.football.api-sports.io';
 const LIVE_ST = ['1H', 'HT', '2H', 'ET', 'BT', 'P', 'LIVE', 'INT', 'SUSP'];

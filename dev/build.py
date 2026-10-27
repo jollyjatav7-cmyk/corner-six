@@ -20,6 +20,14 @@ def read(*p):
 
 
 base = json.loads(read(DATA, 'baseline.json'))
+# average frequencies per team (six_rates.py) and the "接下来" model on corner-sb's base (six_cbase.py)
+if os.path.exists(os.path.join(DATA, 'rates.json')):
+    base['rate'] = json.loads(read(DATA, 'rates.json'))['rate']
+if os.path.exists(os.path.join(DATA, 'proj.json')):
+    pj = json.loads(read(DATA, 'proj.json'))
+    base['proj'] = {k: pj[k] for k in ('prior', 'cb', 'add', 'six', 'net')}
+    base['proj']['check'] = {s: {t: {m: round(pj['check']['lolo'][s][t][m]['corr'], 3) for m in pj['check']['lolo'][s][t]}
+                                 for t in ('half', 'match')} for s in pj['check']['lolo']}
 html = read(SRC, 'app.html')
 for key in ('__BASE__', '__APPVER__'):
     assert html.count(key) == 1, f'{key} must appear exactly once in app.html'

@@ -127,7 +127,7 @@ async function sync(p){
   check(calls.length === before, 'no automatic sync by default, even with the old every-3-minutes setting saved on the phone (' + (calls.length - before) + ' requests in 3 min)');
   await p.click('#qbSix'); await p.waitForTimeout(350);
   const six = await p.textContent('#tabSix');
-  check(six.indexOf('按六项＋联网估计') >= 0, 'six table labels the estimate as six factors + API');
+  check(six.indexOf('比分、时段＋六项＋联网') >= 0, 'six table labels the estimate as score, time, six factors + API');
   check(six.indexOf('看到的 / 动作折算') >= 0 && six.indexOf('加入前 2') >= 0, 'corner row compares only the corners you watched with the action estimate; pre-join ones shown apart');
   await p.screenshot({ path: `${out}/net_six.png` });
   await p.evaluate(() => { const m = document.querySelector('#mid'); m.scrollTop = m.scrollHeight; });
