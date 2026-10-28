@@ -24,8 +24,8 @@ let bad = 0;
       }, mob);
       await page.click('.pad[data-i="1"] [data-k="ar"]');   // re-render with the new counts
       const r = await page.evaluate(() => {
-        const els = [...document.querySelectorAll('.pad .k, .pad .rl')].filter(z => z.offsetParent);
-        const over = els.filter(z => z.scrollWidth > z.clientWidth + 1 || [...z.querySelectorAll('.av')].some(a => { const x = a.getBoundingClientRect(), y = z.getBoundingClientRect(); return x.width && (x.left < y.left - 0.5 || x.right > y.right + 0.5); }));
+        const els = [...document.querySelectorAll('.pad .k, .pad .rl, .pad .rowq')].filter(z => z.offsetParent);
+        const over = els.filter(z => z.scrollWidth > z.clientWidth + 1 || [...z.querySelectorAll('.fq')].some(a => { const x = a.getBoundingClientRect(), y = z.getBoundingClientRect(); return x.width && (x.left < y.left - 0.5 || x.right > y.right + 0.5); }));
         const st = document.querySelector('.strip').getBoundingClientRect();
         const keys = [...document.querySelectorAll('.pad .k')].filter(z => z.offsetParent).map(z => z.getBoundingClientRect());
         return { n: els.length, over: over.map(z => z.textContent.replace(/\s+/g, ' ').trim()).slice(0, 6), bottom: Math.max(...keys.map(k => k.bottom)), strip: st.top, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth };

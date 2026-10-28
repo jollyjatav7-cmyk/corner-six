@@ -98,19 +98,27 @@ body.ended .pad[data-i="1"]{display:none}
 .k:active{background:var(--tile2)}
 .k .l{font-size:14px;font-weight:600;line-height:1.15;text-align:center;white-space:nowrap}
 .k .c{font:600 18px/1 var(--f-num);font-variant-numeric:tabular-nums;color:var(--chalk2)}
-.k.big{min-height:64px;flex-direction:row;gap:10px}
-/* 跟平均比：均x（公开数据里同样是主队／客队的球队，在你看的同样时间里平均几次）；↑明显比平均多、↓明显比平均少 */
-.av{font:500 11px/1 var(--f-num);font-variant-numeric:tabular-nums;color:var(--chalk2);white-space:nowrap;letter-spacing:.01em}
-.av.up{color:var(--flag);font-weight:700}
-.av.dn{opacity:.6}
-.av:empty{display:none}
-.k.ckb .av,.k.ckb .av.up{color:var(--on-flag)} .k.ckb .av.up{font-weight:800}
-.k.big .av{font-size:12px}
-.rl .av{font:500 11.5px/1 var(--f-num);margin-top:3px;color:var(--chalk2)}
-.rl .av.up{font-weight:700;color:var(--flag)}
-.row5 .k{padding:6px 2px}
-.row5 .k .av{font-size:10.5px;letter-spacing:-.02em}
-@media (min-width:900px) and (max-width:1100px){.row5 .k .av{font-size:9.5px;letter-spacing:-.04em}}
+.k.big{min-height:64px;flex-direction:column;gap:2px}
+.k.big .kt{gap:10px}
+/* 频率一行：等级＋现在＋平均（次/10分钟） */
+.kt{display:flex;align-items:baseline;justify-content:center;gap:8px;min-width:0}
+.fq{display:block;font:500 11px/1.35 var(--f-ui);color:var(--chalk2);white-space:nowrap;letter-spacing:-.01em}
+.fq small{font-size:10px;opacity:.85}
+.lvb{display:inline-block;font:700 10.5px/1.45 var(--f-ui);font-style:normal;padding:0 4px;border-radius:5px;margin-right:4px;vertical-align:1px}
+.lvb.l0{background:rgba(255,255,255,.10);color:var(--chalk2);font-weight:500}
+.lvb.l1{background:#4F7FB8;color:#fff}
+.lvb.l2{background:rgba(126,170,226,.38);color:var(--chalk)}
+.lvb.l3{background:rgba(255,255,255,.17);color:var(--chalk)}
+.lvb.l4{background:rgba(242,194,48,.5);color:var(--chalk)}
+.lvb.l5{background:var(--flag);color:var(--on-flag)}
+.k.ckb .fq{color:var(--on-flag)}
+.k.ckb .lvb.l0,.k.ckb .lvb.l3{background:rgba(42,33,0,.12);color:var(--on-flag)}
+.k.ckb .lvb.l2{background:rgba(42,33,0,.2);color:var(--on-flag)} .k.ckb .lvb.l1{background:#2F5A8C;color:#fff}
+.k.ckb .lvb.l4{background:rgba(42,33,0,.55);color:var(--flag)} .k.ckb .lvb.l5{background:var(--on-flag);color:var(--flag)}
+.rowq{padding:0 4px 1px;margin-top:-1px;text-align:left}
+.rowq .fq{font-size:11.5px}
+.big2 .fq small{display:none}
+@media (max-width:389px){.acts .fq{font-size:10.5px;letter-spacing:-.02em} .acts .lvb{padding:0 4px;margin-right:4px}}
 .k.big .l{font-size:17px}
 .k.big .c{font-size:26px}
 .k.ckb{background:var(--flag);color:var(--on-flag)} .k.ckb .c{color:var(--on-flag);opacity:.75}
@@ -199,8 +207,11 @@ body.ended .pad[data-i="1"]{display:none}
 .dt td{border-top:1px solid var(--rule);padding:6px 0;text-align:right;font:600 15px var(--f-num);font-variant-numeric:tabular-nums}
 .dt td:first-child{text-align:left;font:600 13px var(--f-ui);color:var(--ink2)}
 .dt td small{font:500 11px var(--f-ui);color:var(--muted);margin-left:2px}
-.dt .av{color:var(--muted);margin-left:4px;font-size:11.5px}
-.dt .av.up{color:var(--ink);opacity:1} .dt .av.dn{opacity:.75}
+.dtq th small{display:block;font-size:10px;font-weight:500;color:var(--muted)}
+.dtq td small.n{display:block;font:500 10.5px var(--f-ui);color:var(--muted);margin:1px 0 0}
+.dt .lvb{margin:0 0 0 5px;vertical-align:2px}
+.dt .lvb.l0{background:var(--line2);color:var(--muted)} .dt .lvb.l1{background:#4F7FB8;color:#fff} .dt .lvb.l2{background:#D5E3F5;color:#28466E}
+.dt .lvb.l3{background:var(--line2);color:var(--ink2)} .dt .lvb.l4{background:#F7E2A0;color:#5A4500} .dt .lvb.l5{background:var(--flag);color:var(--on-flag)}
 .dt tr.sub td:first-child{font-weight:500;color:var(--muted);padding-left:12px}
 .dt tr.sub td{font-size:14px;color:var(--ink2)}
 .srcl{display:grid;gap:4px}
@@ -414,7 +425,7 @@ textarea.fi{height:140px;padding:10px 12px;font:12px/1.4 ui-monospace,Menlo,mono
   .undo{height:28px;padding:0 10px;font-size:12px;max-width:none;flex:none}
   .board{flex:1;min-height:0;padding:6px;gap:5px;border-radius:16px;display:flex;flex-direction:column}
   .acts{flex:1;min-height:0;grid-auto-rows:minmax(0,1fr)}
-  .acts>.k{min-height:0;flex-direction:row;gap:8px;padding:2px 6px}
+  .acts>.k{min-height:0;flex-direction:column;gap:1px;padding:2px 6px}
   .acts>.k .l{font-size:15px}
   .acts>.k .c{font-size:19px}
   .main .mid{position:fixed;left:0;right:0;bottom:0;z-index:16;max-height:86vh;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;border-radius:22px 22px 0 0;border:0;box-shadow:0 -10px 40px rgba(0,0,0,.2);padding:4px 14px calc(18px + env(safe-area-inset-bottom));-webkit-transform:translateY(105%);transform:translateY(105%);visibility:hidden;transition:transform .25s ease,visibility 0s .25s}
@@ -1036,35 +1047,29 @@ function tickClock(){
   const hs = $('#hudS');
   if (hs){ const idle = !run && !M.tm.b && M.st !== 2 && !M.tm.ht; hs.querySelector('small').textContent = M.tm.ht ? '下半场 ▶' : idle ? '开球 ▶' : M.st === 2 ? '已结束' : fmtClock(p, t); hs.classList.toggle('kick', !!M.tm.ht || idle); }
 }
-/* 跟平均比：公开数据里同样是主队（客队）的球队，在你看的这段时间里平均有几次（上下半场分开算） */
-function avgCnt(i, code, scope){
-  const R = BASE.rate; if (!R) return null;
-  let e = 0, mins = 0;
-  for (const p of scope === 'ft' ? [1, 2] : [+scope[1]]){
-    const sp = halfSpan(M, p); if (!sp) continue;
-    const mn = (sp[1] - sp[0]) / 60, r = R[p][i];
-    mins += mn;
-    e += mn * (ACT[code] ? ACT[code].o.reduce((x, o) => x + (r[code + o] || 0), 0) : (r[code] || 0));
-  }
-  return mins >= 1 ? e : null;
+/* 频率：所有球队平均每 10 分钟几次（2015/16 四个联赛），跟你现在的频率（这个半场记的次数 ÷ 看的分钟 × 10）比。
+   等级看两个频率的比：1.5 倍以上很快、1.2 倍以上快、差不到两成平均、0.83 倍以下慢、0.67 倍以下很慢。
+   平均来说这段时间不到 2 次的（刚开始看、或远射角球这种少的），先显示“还早” */
+const PACE_W = ['还早', '很慢', '慢', '平均', '快', '很快'];
+function paceOf(n, code, mins){
+  const avg = BASE.per10 ? BASE.per10[code] : null;
+  if (avg == null) return null;
+  const cur = mins >= 2 ? n / mins * 10 : null, r = cur != null ? cur / avg : null;
+  const lv = r == null || avg * mins / 10 < 2 ? 0 : r >= 1.5 ? 5 : r >= 1.2 ? 4 : r > 1 / 1.2 ? 3 : r > 1 / 1.5 ? 2 : 1;
+  return { avg: avg, cur: cur, lv: lv };
 }
-/* 差距够大才标箭头：(你的次数 − 平均) ÷ √(平均+1) 超过 ±1 */
-function avgParts(n, e){
-  if (e == null) return { cls: '', txt: '' };
-  const z = (n - e) / Math.sqrt(e + 1), up = z >= 1, dn = z <= -1;
-  return { cls: up ? ' up' : dn ? ' dn' : '', txt: '均' + (e < 9.95 ? e.toFixed(1) : Math.round(e)) + (up ? '↑' : dn ? '↓' : '') };
+const fq1 = v => v < 9.95 ? v.toFixed(1) : String(Math.round(v));
+const paceBadge = lv => '<i class="lvb l' + lv + '">' + PACE_W[lv] + '</i>';
+function paceHTML(q){
+  if (!q) return '';
+  return q.cur == null ? '平均' + fq1(q.avg) + '<small> 次/10分</small>' : paceBadge(q.lv) + '现在' + fq1(q.cur) + ' 平均' + fq1(q.avg) + '<small> 次/10分</small>';
 }
-function avgTag(n, e){ const r = avgParts(n, e); return r.txt ? '<span class="av' + r.cls + '">' + r.txt + '</span>' : ''; }
-/* 按键上的：时间在走，平均跟着变，每 15 秒只更新这几个字（不重画按键） */
-function avgSpan(n, i, code, scope){
-  const r = avgParts(n, avgCnt(i, code, scope));
-  return '<span class="av' + r.cls + '" data-avi="' + i + '" data-avc="' + code + '" data-avn="' + n + '" data-avs="' + scope + '">' + r.txt + '</span>';
+/* 按键上的频率；时间在走，每 15 秒只更新这一行（不重画按键） */
+function paceSpan(n, code, scope){
+  return '<span class="fq" data-pn="' + n + '" data-pc="' + code + '" data-ps="' + scope + '">' + paceHTML(paceOf(n, code, minsOf(M, scope))) + '</span>';
 }
-function renderAvgs(){
-  for (const el of $$('.pad .av[data-avc]')){
-    const r = avgParts(+el.dataset.avn, avgCnt(+el.dataset.avi, el.dataset.avc, el.dataset.avs));
-    el.className = 'av' + r.cls; el.textContent = r.txt;
-  }
+function renderPaces(){
+  for (const el of $$('.pad .fq[data-pc]')) el.innerHTML = paceHTML(paceOf(+el.dataset.pn, el.dataset.pc, minsOf(M, el.dataset.ps)));
 }
 /* 记录按键：iPad 一下就记到结果；手机先点动作，再在弹出的结果里选 */
 function cnt(c, k){ return c[k] || 0; }
@@ -1093,16 +1098,17 @@ function renderPads(){
     h += '<div class="board">';
     if (isPhone()){
       h += '<div class="acts">'
-        + '<button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span>' + avgSpan(g.ar, i, 'ar', scope) + '</button>'
-        + ACTS.map(a => '<button class="k" data-act="' + a + '" data-i="' + i + '"><span class="l">' + ACT[a].n + '</span><span class="c">' + g[a] + '</span>' + avgSpan(g[a], i, a, scope) + '</button>').join('')
-        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">' + FLAG.replace('<svg', '<svg width="16" height="16"') + ' 角球</span><span class="c">' + (c.ck || 0) + '</span>' + avgSpan(c.ck || 0, i, 'ck', scope) + '</button>'
+        + '<button class="k big" data-k="ar" data-i="' + i + '"><span class="kt"><span class="l">到达</span><span class="c">' + g.ar + '</span></span>' + paceSpan(g.ar, 'ar', scope) + '</button>'
+        + ACTS.map(a => '<button class="k" data-act="' + a + '" data-i="' + i + '"><span class="kt"><span class="l">' + ACT[a].n + '</span><span class="c">' + g[a] + '</span></span>' + paceSpan(g[a], a, scope) + '</button>').join('')
+        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="kt"><span class="l">' + FLAG.replace('<svg', '<svg width="16" height="16"') + ' 角球</span><span class="c">' + (c.ck || 0) + '</span></span>' + paceSpan(c.ck || 0, 'ck', scope) + '</button>'
         + ovHTML(i) + '</div>';
     } else {
-      h += '<div class="big2"><button class="k big" data-k="ar" data-i="' + i + '"><span class="l">到达</span><span class="c">' + g.ar + '</span>' + avgSpan(g.ar, i, 'ar', scope) + '</button>'
-        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="l">角球</span><span class="c">' + (c.ck || 0) + '</span>' + avgSpan(c.ck || 0, i, 'ck', scope) + '</button></div>';
+      h += '<div class="big2"><button class="k big" data-k="ar" data-i="' + i + '"><span class="kt"><span class="l">到达</span><span class="c">' + g.ar + '</span></span>' + paceSpan(g.ar, 'ar', scope) + '</button>'
+        + '<button class="k big ckb" data-k="ck" data-i="' + i + '"><span class="kt"><span class="l">角球</span><span class="c">' + (c.ck || 0) + '</span></span>' + paceSpan(c.ck || 0, 'ck', scope) + '</button></div>';
       for (const a of ACTS){
-        h += '<div class="row5' + (a === 'p' ? ' two' : '') + '"><div class="rl"><b>' + ACT[a].n + '</b><span>' + g[a] + '</span>' + avgSpan(g[a], i, a, scope) + '</div>'
-          + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-k="' + a + o + '" data-i="' + i + '"><span class="l">' + OUT[a][o] + '</span><span class="c">' + cnt(c, a + o) + '</span>' + avgSpan(cnt(c, a + o), i, a + o, scope) + '</button>').join('') + '</div>';
+        h += '<div class="row5' + (a === 'p' ? ' two' : '') + '"><div class="rl"><b>' + ACT[a].n + '</b><span>' + g[a] + '</span></div>'
+          + ACT[a].o.map(o => '<button class="k' + (o === 'z' ? ' goal' : '') + '" data-k="' + a + o + '" data-i="' + i + '"><span class="l">' + OUT[a][o] + '</span><span class="c">' + cnt(c, a + o) + '</span></button>').join('') + '</div>'
+          + '<div class="rowq">' + paceSpan(g[a], a, scope) + '</div>';
         if (a === 'e' || a === 'p') h += '<div class="sep"></div>';
       }
       h += '<div class="minor"><button class="k" data-k="og" data-i="' + i + '"><span class="l">对方乌龙</span><span class="c">' + cnt(c, 'og') + '</span></button>'
@@ -1202,23 +1208,25 @@ function renderSix(){
 function renderData(){
   const scope = scopeNow(), mins = minsOf(M, scope);
   const c = [tally(M, 0, scope), tally(M, 1, scope)], ca = [tally(M, 0, scope, true), tally(M, 1, scope, true)], g = c.map(groups);
-  const cell = (n, i, code) => '<td>' + n + avgTag(n, avgCnt(i, code, scope)) + '</td>';
+  const rate = n => mins >= 2 ? fq1(n / mins * 10) : '—';
+  const qcell = (n, code) => { const q = paceOf(n, code, mins); return '<td>' + (q && q.cur != null ? '<b>' + fq1(q.cur) + '</b>' + paceBadge(q.lv) : '—') + '<small class="n">' + n + ' 次</small></td>'; };
   const rows = [['到达', 'ar'], ['下底传中', 'd'], ['45度传中', 'e'], ['突破渗透', 'p'], ['远射', 'l'], ['禁区射门', 's'], ['角球', 'ck']];
   const val = (i, k) => k === 'ar' ? g[i].ar : k === 'ck' ? (c[i].ck || 0) : g[i][k];
   const ckb = [(ca[0].ck || 0) - (c[0].ck || 0), (ca[1].ck || 0) - (c[1].ck || 0)];
-  let h = '<div class="shead"><div class="seg">' + ['h1', 'h2', 'ft'].map(s => '<button data-a="scope" data-v="' + s + '" aria-pressed="' + (scope === s) + '">' + SCN[s] + '</button>').join('') + '</div><span class="sp"></span><span class="note">' + Math.round(mins) + ' 分钟</span></div>';
+  const P10 = BASE.per10 || {};
+  let h = '<div class="shead"><div class="seg">' + ['h1', 'h2', 'ft'].map(s => '<button data-a="scope" data-v="' + s + '" aria-pressed="' + (scope === s) + '">' + SCN[s] + '</button>').join('') + '</div><span class="sp"></span><span class="note">看了 ' + Math.round(mins) + ' 分钟</span></div>';
   h += apiLine();
-  h += '<table class="dt dt3"><thead><tr><th>次数（均＝平均）</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th></tr></thead><tbody>';
-  for (const r of rows) h += '<tr><td>' + r[0] + '</td>' + cell(val(0, r[1]), 0, r[1]) + cell(val(1, r[1]), 1, r[1]) + '</tr>';
+  h += '<table class="dt dtq"><thead><tr><th>频率<small>次/10分钟</small></th><th>平均</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th></tr></thead><tbody>';
+  for (const r of rows) h += '<tr><td>' + r[0] + '</td><td class="dim">' + fq1(P10[r[1]] || 0) + '</td>' + qcell(val(0, r[1]), r[1]) + qcell(val(1, r[1]), r[1]) + '</tr>';
   h += '</tbody></table>';
-  if (ckb[0] || ckb[1]) h += '<p class="note">角球只算你看到的这 ' + Math.round(mins) + ' 分钟，才能跟平均比；加入前另有 ' + ckb[0] + '–' + ckb[1] + '（算在比分栏的总数里）。</p>';
-  h += '<table class="dt"><thead><tr><th>结果</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th><th>变角球</th></tr></thead><tbody>';
+  if (ckb[0] || ckb[1]) h += '<p class="note">角球只算你看到的这 ' + Math.round(mins) + ' 分钟；加入前另有 ' + ckb[0] + '–' + ckb[1] + '（算在比分栏的总数里）。</p>';
+  h += '<table class="dt dtq"><thead><tr><th>结果<small>次/10分钟</small></th><th>平均</th><th class="h">' + esc(teamName(0)) + '</th><th class="a">' + esc(teamName(1)) + '</th><th>变角球</th></tr></thead><tbody>';
   for (const a of ACTS){
-    h += '<tr><td>' + ACT[a].n + '</td>' + cell(g[0][a], 0, a) + cell(g[1][a], 1, a) + '<td class="dim">' + pc(BASE.yield[a]) + '</td></tr>';
-    for (const o of ACT[a].o) h += '<tr class="sub"><td>' + OUT[a][o] + '</td>' + cell(c[0][a + o] || 0, 0, a + o) + cell(c[1][a + o] || 0, 1, a + o) + '<td class="dim">' + pc(BASE.yield[a + o]) + '</td></tr>';
-    if (c[0][a] || c[1][a]) h += '<tr class="sub"><td>结果没记</td><td>' + (c[0][a] || 0) + '</td><td>' + (c[1][a] || 0) + '</td><td class="dim"></td></tr>';
+    h += '<tr><td>' + ACT[a].n + '</td><td class="dim">' + fq1(P10[a] || 0) + '</td><td>' + rate(g[0][a]) + '<small class="n">' + g[0][a] + ' 次</small></td><td>' + rate(g[1][a]) + '<small class="n">' + g[1][a] + ' 次</small></td><td class="dim">' + pc(BASE.yield[a]) + '</td></tr>';
+    for (const o of ACT[a].o) h += '<tr class="sub"><td>' + OUT[a][o] + '</td><td class="dim">' + fq1(P10[a + o] || 0) + '</td><td>' + rate(c[0][a + o] || 0) + '</td><td>' + rate(c[1][a + o] || 0) + '</td><td class="dim">' + pc(BASE.yield[a + o]) + '</td></tr>';
+    if (c[0][a] || c[1][a]) h += '<tr class="sub"><td>结果没记</td><td class="dim"></td><td>' + rate(c[0][a] || 0) + '</td><td>' + rate(c[1][a] || 0) + '</td><td class="dim"></td></tr>';
   }
-  h += '</tbody></table><p class="note">“均”是公开数据里同样是主队（或客队）的球队，在你看的这 ' + Math.round(mins) + ' 分钟里平均有几次，上下半场分开算；你的次数跟“均”比，就是频率跟平均比。↑ 是明显比平均多、↓ 是明显比平均少。“变角球”是这种结果直接变成角球的机会。</p>';
+  h += '</tbody></table><p class="note">频率都是 次/10分钟。现在＝你记的次数 ÷ 看的分钟 × 10；平均＝所有球队的平均（2015/16 英超、西甲、意甲、法甲 1,517 场）。等级看现在是平均的几倍：1.5 倍以上很快、1.2 倍以上快、差不到两成算平均、0.83 倍以下慢、0.67 倍以下很慢。平均来说你看的这段时间还不到 2 次的（刚开始看，或远射、角球这种比较少的），先显示“还早”。“变角球”是这种结果直接变成角球的机会。</p>';
   $('#tabData').innerHTML = h;
 }
 function apiLine(){
@@ -1287,7 +1295,7 @@ setInterval(() => {
   tickClock();
   if (M.api && M.api.hold && M.api.hold.length) flushHold();
   if (M.api && apiKey() && NET.iv > 0 && M.st === 1 && isRecording() && !netBusy && sheet.hidden && LIVE_ST.indexOf(M.api.st) >= 0 && nowSec() - (M.api.at || 0) >= NET.iv) apiSync(false);
-  if (Date.now() - lastSlow > 15000 && M.tm.r){ lastSlow = Date.now(); renderMid(); renderHud(); renderAvgs(); }
+  if (Date.now() - lastSlow > 15000 && M.tm.r){ lastSlow = Date.now(); renderMid(); renderHud(); renderPaces(); }
   if (sheetKind === 'join' && sheetData.tp && sheetData.tp.live) tpShow(sheetData.tp);
   if (sheetKind === 'clock'){ const b = $('#shClk'); if (b) b.textContent = M.tm.ht ? '中场' : fmtClock(M.tm.p, clockOf(M)); if (sheetData.tp && sheetData.tp.live) tpShow(sheetData.tp); }
 }, 1000);
@@ -1363,7 +1371,7 @@ function openClock(){
   openSheet('clock', { tp: { p: p, v: clamp(v, TPR[p][0], TPR[p][1]), live: !!M.tm.r && !M.tm.ht, at: Date.now() } });
 }
 const HELP = {
-  pads: ['记录按键', '主画面两边的按键', '左边记主队控球时、右边记客队控球时发生的事。iPad 一下就点到结果；手机先点动作（例如“下底传中”），再在弹出的选单里点结果（被挡、解围……），8 秒没点就当“结果没记”，次数照样算。传中选“到人”后会接着弹出射门结果（头球攻门就在这里点），没射门按“没射门”。按键上的“均 x”是平均球队在你看的同样时间里有几次，明显比平均多标 ↑、少标 ↓。点错了按球队名字旁边的“撤销”，或在“全部事件”里改。'],
+  pads: ['记录按键', '主画面两边的按键', '左边记主队控球时、右边记客队控球时发生的事。iPad 一下就点到结果；手机先点动作（例如“下底传中”），再在弹出的选单里点结果（被挡、解围……），8 秒没点就当“结果没记”，次数照样算。传中选“到人”后会接着弹出射门结果（头球攻门就在这里点），没射门按“没射门”。每个动作下面写着“现在 x · 平均 y 次/10分”和等级（很慢、慢、平均、快、很快；看得还不够久时显示“还早”）。点错了按球队名字旁边的“撤销”，或在“全部事件”里改。'],
   six: ['六项评估', 'iPad 中间卡片；手机上方摘要条或底部“六项”', '把你点的次数换成六项的等级（1–5），跟公开数据或你自己的记录比，3 是中间。时间短、次数少的时候会往平均拉，避免一开始乱跳。每一格都可以点开看说明，或改成你自己的手动评级。'],
   proj: ['接下来', '六项表最下面、手机摘要条', '估计接下来每 10 分钟几个角球，以及这个半场和全场大概会有几个。用的是“角球数据记录”的分钟模型：半场里的时段（补时阶段角球多）、主客场、比分（领先的一方角球少两成多，落后的多一成左右）、红牌（少一人的一方少约四成）、刚有角球（3 分钟内容易再来一个），连之后可能的进球也一起模拟；再乘上你记的六项的倍数（主要靠①到达和⑤心态），连上联网时再加上联网的角球、射门、被挡射门、射正和控球。表里会写出这些倍数。'
     + '检验（2015/16 四个联赛，轮流拿一个联赛测试；预测本半场每队还剩几个角球，相关系数）：什么都不记、只按比分和时段 ' + f2(BASE.proj.check.full.half.base) + '；从开球看，只用六项 ' + f2(BASE.proj.check.full.half.six) + '、加联网 ' + f2(BASE.proj.check.full.half.net)
@@ -1386,7 +1394,7 @@ const DEFS = [
   ['禁区射门', '禁区内射门，包括角球后的头球。点球不算，点球进了用“补录比分”记。结果跟远射一样。', null],
   ['角球', '本队得到角球就点（开出的时候点也可以）。app 会自动找角球前 25 秒内同一队最后一个动作，当作这个角球的来源。', null],
   ['对方乌龙、红牌', '对方乌龙算本队进球。红牌不影响六项，但会用在“接下来”：少一人的一方角球少约四成。（手机上在“补录比分和角球”里记。）', null],
-  ['按键上的“均”', '公开数据里同样是主队（或客队）的球队，在你看的同样时间里平均有几次（上下半场分开算），你的次数跟它比就是频率跟平均比。明显比平均多标 ↑，明显比平均少标 ↓。', null]
+  ['按键上的频率', '每个动作按键下面写着“现在 x · 平均 y 次/10分”：现在＝这个半场你记的次数 ÷ 看的分钟 × 10；平均＝所有球队的平均（2015/16 四个联赛）。前面的等级看现在是平均的几倍：1.5 倍以上很快、1.2 倍以上快、差不到两成平均、0.83 倍以下慢、0.67 倍以下很慢。平均来说你看的这段时间还不到 2 次的（刚开始看，或远射、角球这种少的），先显示“还早”。“数据”分页有每种结果的频率。', null]
 ];
 
 function renderSheet(){
